@@ -1,4 +1,4 @@
-package com.luizmatias.workout_tracker.seeder
+package com.luizmatias.workout_tracker.config.seeder
 
 import com.luizmatias.workout_tracker.model.Product
 import com.luizmatias.workout_tracker.repository.ProductRepository
