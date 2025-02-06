@@ -1,4 +1,4 @@
-package com.luizmatias.workout_tracker.seeder
+package com.luizmatias.workout_tracker.config.seeder
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
