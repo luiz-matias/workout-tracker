@@ -1,6 +1,6 @@
 package com.luizmatias.workout_tracker.service.email
 
-interface NotificationSenderRepository {
+interface NotificationSenderService {
 
     fun send(to: String, subject: String, body: String)
 

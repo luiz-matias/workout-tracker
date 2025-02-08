@@ -9,15 +9,17 @@ import com.sendgrid.helpers.mail.objects.Content
 import com.sendgrid.helpers.mail.objects.Email
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Component
 
+@Component
 class SendGridEmailSender(
     @Value("\${sendgrid.api-key}")
     private val apiKey: String,
     @Value("\${sendgrid.from.email}")
     private val applicationEmail: String
-) : NotificationSenderRepository {
+) {
 
-    override fun send(to: String, subject: String, body: String) {
+    fun send(to: String, subject: String, body: String) {
         val mailFrom = Email(applicationEmail)
         val mailTo = Email(to)
         val content = Content("text/plain", body)

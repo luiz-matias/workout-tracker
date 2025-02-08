@@ -8,18 +8,18 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
-class MaingunEmailSender(
+class MailgunEmailSender(
     @Value("\${mailgun.api-key}")
     private val apiKey: String,
     @Value("\${sendgrid.from.email}")
     private val applicationEmail: String,
     @Value("\${mailgun.domain}")
     private val domain: String
-) : NotificationSenderRepository {
+) {
 
     private val mailgunMessagesApi = MailgunClient.config(apiKey).createApi(MailgunMessagesApi::class.java)
 
-    override fun send(to: String, subject: String, body: String) {
+    fun send(to: String, subject: String, body: String) {
         val message = Message.builder()
             .from(applicationEmail)
             .to(to)

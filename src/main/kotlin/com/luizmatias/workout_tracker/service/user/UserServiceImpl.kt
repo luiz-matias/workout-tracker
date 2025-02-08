@@ -4,7 +4,7 @@ import com.luizmatias.workout_tracker.config.exception.common_exceptions.Busines
 import com.luizmatias.workout_tracker.config.exception.common_exceptions.NotFoundException
 import com.luizmatias.workout_tracker.model.user.User
 import com.luizmatias.workout_tracker.repository.UserRepository
-import com.luizmatias.workout_tracker.service.email.NotificationSenderRepository
+import com.luizmatias.workout_tracker.service.email.NotificationSenderService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserServiceImpl @Autowired constructor(
     private val userRepository: UserRepository,
-    private val emailSenderRepository: NotificationSenderRepository,
+    private val notificationSenderService: NotificationSenderService,
     private val passwordEncoder: PasswordEncoder
 ) : UserService {
 
@@ -26,7 +26,7 @@ class UserServiceImpl @Autowired constructor(
             throw BusinessRuleConflictException("email already in use by another user.")
         }
         val savedUser = userRepository.save(userEncrypted)
-        emailSenderRepository.send(
+        notificationSenderService.send(
             user.email,
             "Welcome to Workout Tracker",
             "Welcome to Workout Tracker, ${user.name}!"
@@ -49,7 +49,7 @@ class UserServiceImpl @Autowired constructor(
         }
 
         val savedUser = userRepository.save(user.copy(password = passwordEncoder.encode(newPassword)))
-        emailSenderRepository.send(
+        notificationSenderService.send(
             user.email,
             "Password changed",
             "Your password has been changed successfully."
