@@ -9,10 +9,8 @@ import com.sendgrid.helpers.mail.objects.Content
 import com.sendgrid.helpers.mail.objects.Email
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
-import org.springframework.stereotype.Component
 
-@Component
-class SendGridNotificationSender(
+class SendGridEmailSender(
     @Value("\${sendgrid.api-key}")
     private val apiKey: String,
     @Value("\${sendgrid.from.email}")
