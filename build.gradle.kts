@@ -24,6 +24,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.4.2")
     implementation("org.springframework.boot:spring-boot-starter-web:3.4.2")
     implementation("org.springframework.boot:spring-boot-starter-security:3.4.2")
+    implementation("org.springframework.boot:spring-boot-starter-validation:3.4.2")
+
+    // Passay
+    implementation("org.passay:passay:1.6.6")
+
 
     // Kotlin
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

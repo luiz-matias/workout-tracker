@@ -3,6 +3,7 @@ package com.luizmatias.workout_tracker.config.exception.controller
 import com.luizmatias.workout_tracker.dto.common.ErrorResponseDTO
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController
 import org.springframework.boot.web.error.ErrorAttributeOptions
 import org.springframework.boot.web.servlet.error.ErrorAttributes
@@ -15,7 +16,12 @@ import java.util.*
 
 @Controller
 @RequestMapping("\${server.error.path:\${error.path:/error}}")
-private class AppErrorController(errorAttributes: ErrorAttributes?) : AbstractErrorController(errorAttributes) {
+private class AppErrorController(
+    errorAttributes: ErrorAttributes?,
+    @Value("\${server.http-response.should-show-internal-errors:false}")
+    private val shouldShowInternalErrors: Boolean
+) : AbstractErrorController(errorAttributes) {
+
 
     @RequestMapping
     fun error(request: HttpServletRequest): ResponseEntity<ErrorResponseDTO> {
@@ -24,6 +30,11 @@ private class AppErrorController(errorAttributes: ErrorAttributes?) : AbstractEr
             request,
             ErrorAttributeOptions.defaults().including(*ErrorAttributeOptions.Include.entries.toTypedArray())
         )
+
+        if (status == HttpStatus.INTERNAL_SERVER_ERROR && !shouldShowInternalErrors) {
+            errorAttributes["message"] = "An internal server error has occurred."
+        }
+
         val errorResponse = ErrorResponseDTO(
             timestamp = Date(),
             status = status.value(),

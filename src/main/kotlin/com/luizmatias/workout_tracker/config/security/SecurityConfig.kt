@@ -1,7 +1,7 @@
 package com.luizmatias.workout_tracker.config.security
 
 import com.luizmatias.workout_tracker.config.exception.UnauthorizedEntryPoint
-import com.luizmatias.workout_tracker.model.AccountRole
+import com.luizmatias.workout_tracker.model.user.AccountRole
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

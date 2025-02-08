@@ -1,6 +1,6 @@
 package com.luizmatias.workout_tracker.service.user
 
-import com.luizmatias.workout_tracker.model.User
+import com.luizmatias.workout_tracker.model.user.User
 import com.luizmatias.workout_tracker.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder

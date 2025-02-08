@@ -2,6 +2,8 @@ package com.luizmatias.workout_tracker.service.auth.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.JWTCreationException
+import com.luizmatias.workout_tracker.config.exception.common_exceptions.InternalServerErrorException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.*
@@ -19,12 +21,16 @@ class JWTServiceImpl : JWTService {
     private lateinit var issuer: String
 
     override fun generateToken(subject: String): String {
-        val algorithm: Algorithm = Algorithm.HMAC256(secretKey)
-        return JWT.create()
-            .withIssuer(issuer)
-            .withSubject(subject)
-            .withExpiresAt(Date(System.currentTimeMillis() + expiryTime.toLong() * 1000))
-            .sign(algorithm)
+        try {
+            val algorithm: Algorithm = Algorithm.HMAC256(secretKey)
+            return JWT.create()
+                .withIssuer(issuer)
+                .withSubject(subject)
+                .withExpiresAt(Date(System.currentTimeMillis() + expiryTime.toLong() * 1000))
+                .sign(algorithm)
+        } catch (e: JWTCreationException) {
+            throw InternalServerErrorException("Failed to create JWT token.")
+        }
     }
 
     override fun validateAndGetSubjectFromToken(token: String): String? {
