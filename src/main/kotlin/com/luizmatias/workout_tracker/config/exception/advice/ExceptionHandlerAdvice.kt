@@ -1,6 +1,5 @@
 package com.luizmatias.workout_tracker.config.exception.advice
 
-import com.auth0.jwt.exceptions.JWTCreationException
 import com.luizmatias.workout_tracker.config.exception.common_exceptions.*
 import com.luizmatias.workout_tracker.dto.common.ErrorResponseDTO
 import jakarta.servlet.http.HttpServletRequest
@@ -16,15 +15,15 @@ import java.util.*
 class ExceptionHandlerAdvice {
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(JWTCreationException::class)
-    fun handleJwtCreationException(
-        exception: JWTCreationException,
+    @ExceptionHandler(InternalServerErrorException::class)
+    fun handleExplicitInternalServerErrorException(
+        exception: InternalServerErrorException,
         request: HttpServletRequest
     ): ErrorResponseDTO {
         return ErrorResponseDTO(
             timestamp = Date(),
             status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            error = "Failed to create JWT token.",
+            error = exception.message,
             path = request.requestURI
         )
     }
