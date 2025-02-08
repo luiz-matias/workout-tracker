@@ -14,7 +14,7 @@ class UnauthorizedEntryPoint : AuthenticationEntryPoint {
     ) {
         response?.sendError(
             HttpServletResponse.SC_UNAUTHORIZED,
-            "Unauthorized: Authentication token was either missing or invalid."
+            "Unauthorized: Authentication token is either missing, invalid or expired."
         )
     }
 
