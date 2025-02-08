@@ -28,7 +28,8 @@ class UsersSeeder @Autowired constructor(
         userRepository.save(
             User(
                 id = null,
-                name = "Luiz Matias",
+                firstName = "Luiz",
+                lastName = "Matias",
                 email = "luizmatias@luizmatias.com",
                 isEmailVerified = true,
                 profilePictureUrl = "https://api.dicebear.com/9.x/notionists/svg?seed=Luiz%20Matias",
@@ -42,14 +43,16 @@ class UsersSeeder @Autowired constructor(
         )
         val users = mutableListOf<User>()
         repeat(9) {
-            val name = faker.name().fullName()
+            val firstName = faker.name().firstName()
+            val lastName = faker.name().lastName()
             users.add(
                 User(
                     id = null,
-                    name = "Luiz Matias",
+                    firstName = firstName,
+                    lastName = lastName,
                     email = faker.internet().emailAddress(),
                     isEmailVerified = faker.bool().bool(),
-                    profilePictureUrl = "https://api.dicebear.com/9.x/notionists/svg?seed=${name.replace(" ", "%20")}",
+                    profilePictureUrl = "https://api.dicebear.com/9.x/notionists/svg?seed=${firstName}%20${lastName}",
                     password = passwordEncoder.encode(faker.internet().password(8, 25, true, true, true)),
                     instagramUsername = faker.internet().username(),
                     twitterUsername = faker.internet().username(),

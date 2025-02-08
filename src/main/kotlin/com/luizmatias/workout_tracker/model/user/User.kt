@@ -10,7 +10,9 @@ data class User(
     @Id @GeneratedValue
     val id: Long? = null,
     @Column(nullable = false)
-    val name: String,
+    val firstName: String,
+    @Column(nullable = false)
+    val lastName: String,
     @Column(nullable = false, unique = true)
     val email: String,
     @Column(nullable = false)
