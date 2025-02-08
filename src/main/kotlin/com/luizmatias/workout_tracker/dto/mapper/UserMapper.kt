@@ -1,26 +1,33 @@
 package com.luizmatias.workout_tracker.dto.mapper
 
-import com.luizmatias.workout_tracker.dto.user.AuthCredentialsDTO
-import com.luizmatias.workout_tracker.dto.user.UserDTO
-import com.luizmatias.workout_tracker.model.AccountRole
-import com.luizmatias.workout_tracker.model.User
-import com.luizmatias.workout_tracker.model.UserPrincipal
+import com.luizmatias.workout_tracker.dto.user.AuthRegisterDTO
+import com.luizmatias.workout_tracker.dto.user.UserResponseDTO
+import com.luizmatias.workout_tracker.model.user.AccountRole
+import com.luizmatias.workout_tracker.model.user.User
+import com.luizmatias.workout_tracker.model.user.UserPrincipal
+import java.util.*
 
 fun User.toPrincipal(): UserPrincipal = UserPrincipal(this)
 
-fun User.toUserDTO(): UserDTO = UserDTO(
-    id = this.id,
+fun User.toUserDTO(): UserResponseDTO = UserResponseDTO(
+    id = this.id ?: -1,
+    name = this.name,
     email = this.email,
+    profilePictureUrl = this.profilePictureUrl,
+    instagramUsername = this.instagramUsername,
+    twitterUsername = this.twitterUsername
 )
 
-fun AuthCredentialsDTO.toUserRegistration(): User = User(
+fun AuthRegisterDTO.toUserRegistration(): User = User(
     id = null,
+    name = this.name,
     email = this.email,
-    password = this.password,
-    role = AccountRole.USER,
     isEmailVerified = false,
-    isCredentialsExpired = false,
-    isAccountExpired = false,
-    isLocked = false,
+    profilePictureUrl = this.profilePictureUrl,
+    password = this.password,
+    instagramUsername = this.instagramUsername,
+    twitterUsername = this.twitterUsername,
+    role = AccountRole.USER,
     isEnabled = true,
+    createdAt = Date()
 )

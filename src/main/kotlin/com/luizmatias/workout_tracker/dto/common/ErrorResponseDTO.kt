@@ -7,4 +7,5 @@ data class ErrorResponseDTO(
     val status: Int,
     val error: String,
     val path: String,
+    val extras: MutableMap<String, String?>? = null
 )

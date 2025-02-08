@@ -3,6 +3,7 @@ package com.luizmatias.workout_tracker.service.auth
 import com.luizmatias.workout_tracker.dto.mapper.toUserDTO
 import com.luizmatias.workout_tracker.dto.mapper.toUserRegistration
 import com.luizmatias.workout_tracker.dto.user.AuthCredentialsDTO
+import com.luizmatias.workout_tracker.dto.user.AuthRegisterDTO
 import com.luizmatias.workout_tracker.dto.user.AuthResponseDTO
 import com.luizmatias.workout_tracker.service.auth.jwt.JWTService
 import com.luizmatias.workout_tracker.service.user.UserService
@@ -18,8 +19,8 @@ class AuthServiceImpl @Autowired constructor(
     private val jwtService: JWTService
 ) : AuthService {
 
-    override fun register(credentials: AuthCredentialsDTO): AuthResponseDTO {
-        val addedUser = userService.registerUser(credentials.toUserRegistration())
+    override fun register(registration: AuthRegisterDTO): AuthResponseDTO {
+        val addedUser = userService.registerUser(registration.toUserRegistration())
         return AuthResponseDTO(addedUser.toUserDTO(), jwtService.generateToken(addedUser.email))
     }
 

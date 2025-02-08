@@ -1,4 +1,4 @@
-package com.luizmatias.workout_tracker.model
+package com.luizmatias.workout_tracker.model.user
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -18,11 +18,11 @@ class UserPrincipal(private val user: User) : UserDetails {
 
     override fun getPassword() = user.password
 
-    override fun isAccountNonExpired() = !user.isAccountExpired
+    override fun isAccountNonExpired() = true
 
-    override fun isAccountNonLocked() = !user.isLocked
+    override fun isAccountNonLocked() = true
 
-    override fun isCredentialsNonExpired() = !user.isCredentialsExpired
+    override fun isCredentialsNonExpired() = true
 
     override fun isEnabled() = user.isEnabled
 }
