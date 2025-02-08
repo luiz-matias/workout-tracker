@@ -1,7 +1,10 @@
 package com.luizmatias.workout_tracker.service.user
 
+import com.luizmatias.workout_tracker.config.exception.common_exceptions.BusinessRuleConflictException
+import com.luizmatias.workout_tracker.config.exception.common_exceptions.NotFoundException
 import com.luizmatias.workout_tracker.model.user.User
 import com.luizmatias.workout_tracker.repository.UserRepository
+import com.luizmatias.workout_tracker.service.email.NotificationSenderRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserServiceImpl @Autowired constructor(
     private val userRepository: UserRepository,
+    private val emailSenderRepository: NotificationSenderRepository,
     private val passwordEncoder: PasswordEncoder
 ) : UserService {
 
@@ -18,7 +22,16 @@ class UserServiceImpl @Autowired constructor(
 
     override fun registerUser(user: User): User {
         val userEncrypted = user.copy(password = passwordEncoder.encode(user.password))
-        return userRepository.save(userEncrypted)
+        if (userRepository.findByEmail(user.email) != null) {
+            throw BusinessRuleConflictException("email already in use by another user.")
+        }
+        val savedUser = userRepository.save(userEncrypted)
+        emailSenderRepository.send(
+            user.email,
+            "Welcome to Workout Tracker",
+            "Welcome to Workout Tracker, ${user.name}!"
+        )
+        return savedUser
     }
 
     override fun updateUser(id: Long, user: User): User? {
@@ -26,6 +39,22 @@ class UserServiceImpl @Autowired constructor(
             return userRepository.save(user)
         }
         return null
+    }
+
+    override fun changePassword(id: Long, existingPassword: String, newPassword: String): User {
+        val user = userRepository.findById(id).orElse(null) ?: throw NotFoundException("User not found.")
+
+        if (!passwordEncoder.matches(existingPassword, user.password)) {
+            throw BusinessRuleConflictException("Invalid existing password.")
+        }
+
+        val savedUser = userRepository.save(user.copy(password = passwordEncoder.encode(newPassword)))
+        emailSenderRepository.send(
+            user.email,
+            "Password changed",
+            "Your password has been changed successfully."
+        )
+        return savedUser
     }
 
     override fun deleteUser(id: Long): Boolean {

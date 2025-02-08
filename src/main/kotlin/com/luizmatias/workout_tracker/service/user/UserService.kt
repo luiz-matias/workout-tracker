@@ -10,6 +10,8 @@ interface UserService {
 
     fun updateUser(id: Long, user: User): User?
 
+    fun changePassword(id: Long, existingPassword: String, newPassword: String): User
+
     fun deleteUser(id: Long): Boolean
 
 }

@@ -29,6 +29,8 @@ dependencies {
     // Passay
     implementation("org.passay:passay:1.6.6")
 
+    // SendGrid
+    implementation("com.sendgrid:sendgrid-java:4.10.3")
 
     // Kotlin
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
