@@ -18,17 +18,17 @@ class StrongPasswordConstraintValidator : ConstraintValidator<StrongPassword, St
                     EnglishSequenceData.Alphabetical,
                     3,
                     false
-                ), //Should not have numerical sequences of 5 digits (like abcde)
+                ), //Should not have numerical sequences (like abcde)
                 IllegalSequenceRule(
                     EnglishSequenceData.Numerical,
                     3,
                     false
-                ), //Should not have numerical sequences of 5 digits (like 12345)
+                ), //Should not have numerical sequences (like 12345)
                 IllegalSequenceRule(
                     EnglishSequenceData.USQwerty,
                     3,
                     false
-                ) //Should not have keyboard sequences of 5 digits (like qwerty)
+                ) //Should not have keyboard sequences (like qwerty)
             )
         )
 
