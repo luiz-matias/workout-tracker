@@ -11,7 +11,8 @@ fun User.toPrincipal(): UserPrincipal = UserPrincipal(this)
 
 fun User.toUserDTO(): UserResponseDTO = UserResponseDTO(
     id = this.id ?: -1,
-    name = this.name,
+    firstName = this.firstName,
+    lastName = this.lastName,
     email = this.email,
     profilePictureUrl = this.profilePictureUrl,
     instagramUsername = this.instagramUsername,
@@ -20,7 +21,8 @@ fun User.toUserDTO(): UserResponseDTO = UserResponseDTO(
 
 fun AuthRegisterDTO.toUserRegistration(): User = User(
     id = null,
-    name = this.name,
+    firstName = this.firstName,
+    lastName = this.lastName,
     email = this.email,
     isEmailVerified = false,
     profilePictureUrl = this.profilePictureUrl,
