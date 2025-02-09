@@ -25,12 +25,12 @@ class RefreshTokenServiceImpl @Autowired constructor(
             id = null,
             user = user,
             token = getRandomUUID(),
-            expiry = getExpiryTime()
+            expiresAt = getExpiryTime()
         )
         refreshToken = refreshTokenRepository.save(
             refreshToken.copy(
                 token = getRandomUUID(),
-                expiry = getExpiryTime()
+                expiresAt = getExpiryTime()
             )
         )
 
@@ -41,13 +41,13 @@ class RefreshTokenServiceImpl @Autowired constructor(
     override fun regenerateTokens(refreshToken: String): TokenDTO {
         var refreshTokenEntity =
             refreshTokenRepository.findByToken(refreshToken) ?: throw UnauthorizedException("Refresh token not found.")
-        if (refreshTokenEntity.expiry.isBefore(Instant.now())) {
+        if (refreshTokenEntity.expiresAt.isBefore(Instant.now())) {
             refreshTokenRepository.delete(refreshTokenEntity)
             throw UnauthorizedException("Refresh token expired.")
         }
         refreshTokenEntity = refreshTokenEntity.copy(
             token = getRandomUUID(),
-            expiry = getExpiryTime()
+            expiresAt = getExpiryTime()
         )
         val accessToken = jwtService.generateAccessToken(refreshTokenEntity.user.email)
         refreshTokenEntity = refreshTokenRepository.save(refreshTokenEntity)

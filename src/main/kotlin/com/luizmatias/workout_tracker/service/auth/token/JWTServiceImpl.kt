@@ -6,7 +6,7 @@ import com.auth0.jwt.exceptions.JWTCreationException
 import com.luizmatias.workout_tracker.api.exception.common_exceptions.InternalServerErrorException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import java.util.*
+import java.time.Instant
 
 @Service
 class JWTServiceImpl : JWTService {
@@ -26,7 +26,7 @@ class JWTServiceImpl : JWTService {
             return JWT.create()
                 .withIssuer(issuer)
                 .withSubject(subject)
-                .withExpiresAt(Date(System.currentTimeMillis() + expiryTime.toLong() * 1000))
+                .withExpiresAt(Instant.now().plusSeconds(expiryTime.toLong()))
                 .sign(algorithm)
         } catch (e: JWTCreationException) {
             throw InternalServerErrorException("Failed to create JWT token.")

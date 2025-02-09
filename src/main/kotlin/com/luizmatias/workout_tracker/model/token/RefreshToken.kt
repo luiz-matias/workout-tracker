@@ -12,5 +12,5 @@ data class RefreshToken(
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     val user: User,
     val token: String,
-    val expiry: Instant,
+    val expiresAt: Instant,
 )
