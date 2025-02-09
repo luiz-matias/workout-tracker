@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
-class SecurityFilter @Autowired constructor(
+class AccessTokenSecurityFilter @Autowired constructor(
     private val userDetailsService: UserDetailsService,
     private val jwtService: JWTService
 ) : OncePerRequestFilter() {

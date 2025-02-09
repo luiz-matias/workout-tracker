@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig @Autowired constructor(private val securityFilter: SecurityFilter) {
+class SecurityConfig @Autowired constructor(private val accessTokenSecurityFilter: AccessTokenSecurityFilter) {
 
     @Bean
     fun securityFilterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
@@ -38,7 +38,7 @@ class SecurityConfig @Autowired constructor(private val securityFilter: Security
             .anonymous { it.disable() }
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(accessTokenSecurityFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
     }
 
