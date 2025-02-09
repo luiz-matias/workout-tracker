@@ -29,7 +29,7 @@ class UserServiceImpl @Autowired constructor(
         notificationSenderService.send(
             user.email,
             "Welcome to Workout Tracker",
-            "Welcome to Workout Tracker, ${user.name}!"
+            "Welcome to Workout Tracker, ${user.firstName}!"
         )
         return savedUser
     }
