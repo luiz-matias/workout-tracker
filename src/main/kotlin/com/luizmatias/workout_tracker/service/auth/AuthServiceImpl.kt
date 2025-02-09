@@ -1,11 +1,11 @@
 package com.luizmatias.workout_tracker.service.auth
 
-import com.luizmatias.workout_tracker.dto.mapper.toUserDTO
-import com.luizmatias.workout_tracker.dto.mapper.toUserRegistration
-import com.luizmatias.workout_tracker.dto.user.AuthCredentialsDTO
-import com.luizmatias.workout_tracker.dto.user.AuthRegisterDTO
-import com.luizmatias.workout_tracker.dto.user.AuthResponseDTO
-import com.luizmatias.workout_tracker.service.auth.jwt.JWTService
+import com.luizmatias.workout_tracker.api.dto.mapper.toUserDTO
+import com.luizmatias.workout_tracker.api.dto.mapper.toUserRegistration
+import com.luizmatias.workout_tracker.api.dto.user.AuthCredentialsDTO
+import com.luizmatias.workout_tracker.api.dto.user.AuthRegisterDTO
+import com.luizmatias.workout_tracker.api.dto.user.AuthResponseDTO
+import com.luizmatias.workout_tracker.service.auth.jwt.RefreshTokenService
 import com.luizmatias.workout_tracker.service.user.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
@@ -16,12 +16,12 @@ import org.springframework.stereotype.Service
 class AuthServiceImpl @Autowired constructor(
     private val authenticationManager: AuthenticationManager,
     private val userService: UserService,
-    private val jwtService: JWTService
+    private val refreshTokenService: RefreshTokenService
 ) : AuthService {
 
     override fun register(registration: AuthRegisterDTO): AuthResponseDTO {
         val addedUser = userService.registerUser(registration.toUserRegistration())
-        return AuthResponseDTO(addedUser.toUserDTO(), jwtService.generateToken(addedUser.email))
+        return AuthResponseDTO(addedUser.toUserDTO(), refreshTokenService.generateTokensFromUserAuth(addedUser))
     }
 
     override fun login(credentials: AuthCredentialsDTO): AuthResponseDTO? {
@@ -35,7 +35,7 @@ class AuthServiceImpl @Autowired constructor(
         if (authResponse.isAuthenticated) {
             val user = userService.getUserByEmail(credentials.email)
             return user?.let {
-                AuthResponseDTO(it.toUserDTO(), jwtService.generateToken(it.email))
+                AuthResponseDTO(it.toUserDTO(), refreshTokenService.generateTokensFromUserAuth(user))
             }
         }
         return null

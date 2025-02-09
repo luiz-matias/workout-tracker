@@ -2,6 +2,7 @@ package com.luizmatias.workout_tracker.model.user
 
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
+import java.time.Instant
 import java.util.*
 
 @Entity
@@ -27,5 +28,5 @@ data class User(
     @Column(nullable = false)
     val isEnabled: Boolean,
     @CreatedDate
-    val createdAt: Date,
+    val createdAt: Instant,
 )

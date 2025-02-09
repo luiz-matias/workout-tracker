@@ -1,6 +1,6 @@
 package com.luizmatias.workout_tracker.service.email
 
-import com.luizmatias.workout_tracker.config.exception.common_exceptions.InternalServerErrorException
+import com.luizmatias.workout_tracker.api.exception.common_exceptions.InternalServerErrorException
 import com.sendgrid.Method
 import com.sendgrid.Request
 import com.sendgrid.SendGrid

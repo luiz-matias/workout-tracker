@@ -1,6 +1,6 @@
 package com.luizmatias.workout_tracker.service.email
 
-import com.luizmatias.workout_tracker.config.exception.common_exceptions.InternalServerErrorException
+import com.luizmatias.workout_tracker.api.exception.common_exceptions.InternalServerErrorException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 

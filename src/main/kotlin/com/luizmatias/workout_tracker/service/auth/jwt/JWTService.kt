@@ -5,7 +5,7 @@ import com.auth0.jwt.exceptions.JWTCreationException
 interface JWTService {
 
     @Throws(JWTCreationException::class)
-    fun generateToken(subject: String): String
+    fun generateAccessToken(subject: String): String
 
     fun validateAndGetSubjectFromToken(token: String): String?
 

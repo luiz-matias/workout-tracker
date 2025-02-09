@@ -1,6 +1,6 @@
 package com.luizmatias.workout_tracker
 
-import com.luizmatias.workout_tracker.config.seeder.DatabaseSeeder
+import com.luizmatias.workout_tracker.db.seeder.DatabaseSeeder
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 

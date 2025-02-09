@@ -3,7 +3,7 @@ package com.luizmatias.workout_tracker.service.auth.jwt
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTCreationException
-import com.luizmatias.workout_tracker.config.exception.common_exceptions.InternalServerErrorException
+import com.luizmatias.workout_tracker.api.exception.common_exceptions.InternalServerErrorException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.*
@@ -14,13 +14,13 @@ class JWTServiceImpl : JWTService {
     @Value("\${jwt.secret}")
     private lateinit var secretKey: String
 
-    @Value("\${jwt.expiry-time-in-seconds}")
+    @Value("\${jwt.access-token-expiry-time-in-seconds}")
     private lateinit var expiryTime: String
 
     @Value("\${jwt.issuer}")
     private lateinit var issuer: String
 
-    override fun generateToken(subject: String): String {
+    override fun generateAccessToken(subject: String): String {
         try {
             val algorithm: Algorithm = Algorithm.HMAC256(secretKey)
             return JWT.create()
