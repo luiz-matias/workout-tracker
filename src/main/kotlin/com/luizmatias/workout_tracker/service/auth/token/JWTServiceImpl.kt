@@ -3,7 +3,7 @@ package com.luizmatias.workout_tracker.service.auth.token
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTCreationException
-import com.luizmatias.workout_tracker.api.exception.common_exceptions.InternalServerErrorException
+import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.InternalServerErrorException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.time.Instant

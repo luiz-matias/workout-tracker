@@ -1,10 +1,9 @@
 package com.luizmatias.workout_tracker.service.user
 
-import com.luizmatias.workout_tracker.api.exception.common_exceptions.BusinessRuleConflictException
-import com.luizmatias.workout_tracker.api.exception.common_exceptions.NotFoundException
+import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.NotFoundException
 import com.luizmatias.workout_tracker.model.user.User
 import com.luizmatias.workout_tracker.repository.UserRepository
-import com.luizmatias.workout_tracker.service.email.NotificationSenderService
+import com.luizmatias.workout_tracker.service.notification.NotificationSenderService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -23,7 +22,7 @@ class UserServiceImpl @Autowired constructor(
     override fun registerUser(user: User): User {
         val userEncrypted = user.copy(password = passwordEncoder.encode(user.password))
         if (userRepository.findByEmail(user.email) != null) {
-            throw BusinessRuleConflictException("email already in use by another user.")
+            throw com.luizmatias.workout_tracker.config.api.exception.common_exceptions.BusinessRuleConflictException("email already in use by another user.")
         }
         val savedUser = userRepository.save(userEncrypted)
         notificationSenderService.send(
@@ -45,7 +44,7 @@ class UserServiceImpl @Autowired constructor(
         val user = userRepository.findById(id).orElse(null) ?: throw NotFoundException("User not found.")
 
         if (!passwordEncoder.matches(existingPassword, user.password)) {
-            throw BusinessRuleConflictException("Invalid existing password.")
+            throw com.luizmatias.workout_tracker.config.api.exception.common_exceptions.BusinessRuleConflictException("Invalid existing password.")
         }
 
         val savedUser = userRepository.save(user.copy(password = passwordEncoder.encode(newPassword)))
