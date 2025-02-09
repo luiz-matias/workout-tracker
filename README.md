@@ -5,7 +5,7 @@
   <!-- <img src="https://i.imgur.com/42m4MaA.png" alt="Project Logo" height="150"> -->
   <h1 align="center">Workout Tracker - Backend</h1>
   <p align="center">
-    A service that tracks your gym workouts and provide insights about your routine.
+    A service that tracks your gym workouts along with your friends to provide insights about your routine and competition with your closed ones.
   </p>
 </div>
 
@@ -142,7 +142,7 @@ Spring Boot is a framework extension from Spring, allowing us to develop backend
 - [X] Security
     - [X] Authentication via JWT
     - [ ] OAuth2
-    - [ ] Strong password requirements
+    - [X] Strong password requirements
     - [X] Password encryption
     - [ ] Role-based routes
 - [ ] Email services
