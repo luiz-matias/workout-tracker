@@ -1,4 +1,4 @@
-package com.luizmatias.workout_tracker.service.auth.jwt
+package com.luizmatias.workout_tracker.service.auth.token
 
 import com.auth0.jwt.exceptions.JWTCreationException
 

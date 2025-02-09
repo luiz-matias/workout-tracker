@@ -5,7 +5,7 @@ import com.luizmatias.workout_tracker.api.dto.mapper.toUserRegistration
 import com.luizmatias.workout_tracker.api.dto.user.AuthCredentialsDTO
 import com.luizmatias.workout_tracker.api.dto.user.AuthRegisterDTO
 import com.luizmatias.workout_tracker.api.dto.user.AuthResponseDTO
-import com.luizmatias.workout_tracker.service.auth.jwt.RefreshTokenService
+import com.luizmatias.workout_tracker.service.auth.token.RefreshTokenService
 import com.luizmatias.workout_tracker.service.user.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager

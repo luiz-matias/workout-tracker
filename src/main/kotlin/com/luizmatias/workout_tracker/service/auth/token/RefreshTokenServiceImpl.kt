@@ -1,4 +1,4 @@
-package com.luizmatias.workout_tracker.service.auth.jwt
+package com.luizmatias.workout_tracker.service.auth.token
 
 import com.luizmatias.workout_tracker.api.dto.token.TokenDTO
 import com.luizmatias.workout_tracker.api.exception.common_exceptions.UnauthorizedException

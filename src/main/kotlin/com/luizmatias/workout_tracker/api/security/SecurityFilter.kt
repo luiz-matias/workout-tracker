@@ -1,6 +1,6 @@
 package com.luizmatias.workout_tracker.api.security
 
-import com.luizmatias.workout_tracker.service.auth.jwt.JWTService
+import com.luizmatias.workout_tracker.service.auth.token.JWTService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

@@ -7,7 +7,7 @@ import com.luizmatias.workout_tracker.api.dto.user.AuthRegisterDTO
 import com.luizmatias.workout_tracker.api.dto.user.AuthResponseDTO
 import com.luizmatias.workout_tracker.api.exception.common_exceptions.UnauthorizedException
 import com.luizmatias.workout_tracker.service.auth.AuthService
-import com.luizmatias.workout_tracker.service.auth.jwt.RefreshTokenService
+import com.luizmatias.workout_tracker.service.auth.token.RefreshTokenService
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
