@@ -39,6 +39,7 @@ dependencies {
 
     // Database
     runtimeOnly("org.postgresql:postgresql")
+    testImplementation("com.h2database:h2")
     implementation("net.datafaker:datafaker:2.4.2")
 
     // Docs
@@ -65,6 +66,35 @@ allOpen {
     annotation("jakarta.persistence.Embeddable")
 }
 
+sourceSets.create("integrationTest") {
+    kotlin {
+        kotlin.srcDir("src/integrationTest/kotlin")
+        resources.srcDir("src/integrationTest/resources")
+        compileClasspath += sourceSets["main"].output + configurations["testRuntimeClasspath"]
+        runtimeClasspath += output + compileClasspath + sourceSets["test"].runtimeClasspath
+    }
+}
+
+configurations[sourceSets["integrationTest"].implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
+configurations[sourceSets["integrationTest"].runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
+
+
+val integrationTestTask = tasks.register<Test>("integrationTest") {
+    description = "Runs the integration tests"
+    group = "verification"
+    testClassesDirs = sourceSets["integrationTest"].output.classesDirs
+    classpath = sourceSets["integrationTest"].runtimeClasspath
+    shouldRunAfter(tasks["test"])
+}
+
+tasks.check {
+    dependsOn(integrationTestTask)
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.withType<Copy>{
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
