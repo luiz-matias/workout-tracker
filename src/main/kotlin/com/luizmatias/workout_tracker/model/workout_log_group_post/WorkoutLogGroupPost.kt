@@ -1,5 +1,6 @@
 package com.luizmatias.workout_tracker.model.workout_log_group_post
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.luizmatias.workout_tracker.model.group_members.GroupMember
 import com.luizmatias.workout_tracker.model.workout_log_post.WorkoutLogPost
 import jakarta.persistence.*
@@ -11,9 +12,11 @@ import java.time.Instant
 data class WorkoutLogGroupPost(
     @Id @GeneratedValue
     val id: Long?,
+    @field:JsonIgnoreProperties("workoutLogGroupPosts")
     @ManyToOne
     @JoinColumn(name = "workout_id")
     val workoutLogPost: WorkoutLogPost,
+    @field:JsonIgnoreProperties("workoutLogGroupPosts")
     @ManyToOne
     @JoinColumn(name = "group_members_id")
     val groupMember: GroupMember,

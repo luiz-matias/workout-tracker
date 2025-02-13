@@ -1,6 +1,8 @@
 package com.luizmatias.workout_tracker.controller
 
 import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.UnauthorizedException
+import com.luizmatias.workout_tracker.dto.common.MessageResponseDTO
+import com.luizmatias.workout_tracker.dto.password_reset.ForgotPasswordRequestDTO
 import com.luizmatias.workout_tracker.dto.token.RefreshTokenRequestDTO
 import com.luizmatias.workout_tracker.dto.token.TokenDTO
 import com.luizmatias.workout_tracker.dto.user.AuthCredentialsDTO
@@ -40,9 +42,15 @@ class AuthController @Autowired constructor(
     }
 
     @PostMapping("/refresh-token")
-    fun login(@RequestBody @Valid refreshTokenDTO: RefreshTokenRequestDTO): ResponseEntity<TokenDTO> {
+    fun refreshToken(@RequestBody @Valid refreshTokenDTO: RefreshTokenRequestDTO): ResponseEntity<TokenDTO> {
         val response = refreshTokenService.regenerateTokens(refreshTokenDTO.refreshToken)
         return ResponseEntity.ok(response)
+    }
+
+    @PostMapping("/forgot-password")
+    fun forgotPassword(@RequestBody @Valid forgotPasswordRequestDTO: ForgotPasswordRequestDTO): ResponseEntity<MessageResponseDTO> {
+        authService.forgotPassword(forgotPasswordRequestDTO.email)
+        return ResponseEntity.ok(MessageResponseDTO("A password reset was sent to the provided email (in case of existing email)."))
     }
 
 }

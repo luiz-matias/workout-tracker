@@ -10,6 +10,8 @@ interface GroupMemberService {
 
     fun getAllGroupMembersByUser(user: User): List<GroupMember>
 
+    fun acceptInviteToGroup(groupToken: String, user: User): GroupMember
+
     fun updateGroupMember(id: Long, groupMember: GroupMember): GroupMember?
 
     fun deleteGroupMember(id: Long): Boolean

@@ -26,12 +26,14 @@ class SecurityConfig @Autowired constructor(private val accessTokenSecurityFilte
         return httpSecurity
             .authorizeHttpRequests {
                 it
+                    .requestMatchers("admin/**").hasAuthority(AccountRole.ADMIN.name)
                     .requestMatchers("/error").permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                    .requestMatchers("admin/**").hasAuthority(AccountRole.ADMIN.name)
+                    .requestMatchers(HttpMethod.GET, "/token/verify-email/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/token/password-reset/**").permitAll()
                     .anyRequest().authenticated()
             }
-            .exceptionHandling { it.authenticationEntryPoint(com.luizmatias.workout_tracker.config.api.exception.UnauthorizedEntryPoint()) }
+            .exceptionHandling { it.authenticationEntryPoint(UnauthorizedEntryPoint()) }
             .formLogin { it.disable() }
             .httpBasic { it.disable() }
             .logout { it.disable() }

@@ -1,5 +1,7 @@
 package com.luizmatias.workout_tracker.model.group_members
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.luizmatias.workout_tracker.model.group.Group
 import com.luizmatias.workout_tracker.model.user.User
 import com.luizmatias.workout_tracker.model.workout_log_group_post.WorkoutLogGroupPost
@@ -12,15 +14,18 @@ import java.time.Instant
 data class GroupMember(
     @Id @GeneratedValue
     val id: Long?,
+    @field:JsonIgnoreProperties("groups", "createdGroups", "workoutLogPosts", "temporaryTokens")
     @ManyToOne
     @JoinColumn(name = "user_id")
     val user: User,
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "group_id")
     val group: Group,
-    @OneToMany(mappedBy = "groupMember", fetch = FetchType.LAZY)
+    @field:JsonIgnoreProperties("groupMember")
+    @OneToMany(mappedBy = "groupMember", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     val workoutLogGroupPosts: List<WorkoutLogGroupPost>,
     @CreatedDate
-    val enteredAt: Instant,
+    val joinedAt: Instant,
     val exitedAt: Instant? = null
 )

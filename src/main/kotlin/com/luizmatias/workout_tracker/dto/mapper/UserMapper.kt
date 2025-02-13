@@ -34,6 +34,7 @@ fun AuthRegisterDTO.toUserRegistration(): User = User(
     groups = emptyList(),
     createdGroups = emptyList(),
     workoutLogPosts = emptyList(),
+    temporaryTokens = emptyList(),
     isEnabled = true,
     createdAt = Instant.now()
 )

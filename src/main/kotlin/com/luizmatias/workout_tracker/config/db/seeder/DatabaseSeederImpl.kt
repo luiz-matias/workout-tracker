@@ -27,6 +27,7 @@ class DatabaseSeederImpl @Autowired constructor(
     private val groupMemberRepository: GroupMemberRepository,
     private val workoutLogPostRepository: WorkoutLogPostRepository,
     private val workoutLogGroupPostRepository: WorkoutLogGroupPostRepository,
+    private val temporaryTokenRepository: TemporaryTokenRepository,
     private val passwordEncoder: PasswordEncoder
 ) : DatabaseSeeder {
 
@@ -51,13 +52,14 @@ class DatabaseSeederImpl @Autowired constructor(
         groupRepository.deleteAllGroups()
         workoutLogPostRepository.deleteAllWorkoutLogPosts()
         refreshTokenRepository.deleteAllRefreshTokens()
+        temporaryTokenRepository.deleteAllTemporaryTokens()
         userRepository.deleteAllUsers()
         logger.info("Data deleted!")
     }
 
     @Async
-    fun addUsers(numberOfUsers: Int = 1_000) {
-        logger.info("Adding users...")
+    fun addUsers(numberOfUsers: Int = 100) {
+        logger.info("Adding $numberOfUsers users...")
         val password = passwordEncoder.encode("123")
         userRepository.save(
             User(
@@ -74,6 +76,7 @@ class DatabaseSeederImpl @Autowired constructor(
                 groups = emptyList(),
                 createdGroups = emptyList(),
                 workoutLogPosts = emptyList(),
+                temporaryTokens = emptyList(),
                 isEnabled = true,
                 createdAt = Instant.now()
             )
@@ -98,6 +101,7 @@ class DatabaseSeederImpl @Autowired constructor(
                     groups = emptyList(),
                     createdGroups = emptyList(),
                     workoutLogPosts = emptyList(),
+                    temporaryTokens = emptyList(),
                     isEnabled = true,
                     createdAt = Instant.now()
                 )
@@ -108,8 +112,8 @@ class DatabaseSeederImpl @Autowired constructor(
     }
 
     @Async
-    private fun addGroups(numberOfGroups: Int = 300) {
-        logger.info("Adding groups...")
+    private fun addGroups(numberOfGroups: Int = 30) {
+        logger.info("Adding $numberOfGroups groups...")
         val groups = mutableListOf<Group>()
         val users = userRepository.findAll()
         repeat(numberOfGroups) {
@@ -133,11 +137,11 @@ class DatabaseSeederImpl @Autowired constructor(
     }
 
     @Async
-    private fun addGroupMembers(numberOfUsersPerGroup: Int = 3) {
-        logger.info("Adding users to groups (N..N relationship)...")
+    private fun addGroupMembers(numberOfUsersPerGroup: Int = 5) {
+        logger.info("Adding $numberOfUsersPerGroup users for each group created...")
         val groupMembers = mutableListOf<GroupMember>()
-        val users = userRepository.findAll()
         groupRepository.findAll().forEach { group ->
+            val users = userRepository.findAll()
             repeat(numberOfUsersPerGroup) {
                 val user = users.random()
                 groupMembers.add(
@@ -146,7 +150,7 @@ class DatabaseSeederImpl @Autowired constructor(
                         user = user,
                         group = group,
                         workoutLogGroupPosts = emptyList(),
-                        enteredAt = Instant.now(),
+                        joinedAt = Instant.now(),
                         exitedAt = null
                     )
                 )
@@ -158,8 +162,8 @@ class DatabaseSeederImpl @Autowired constructor(
     }
 
     @Async
-    private fun addWorkoutLogPosts(numberOfPostsPerUser: Int = 30) {
-        logger.info("Adding workout log posts to users...")
+    private fun addWorkoutLogPosts(numberOfPostsPerUser: Int = 5) {
+        logger.info("Adding $numberOfPostsPerUser workout log posts for each user created...")
         val workoutLogPosts = mutableListOf<WorkoutLogPost>()
         userRepository.findAll().forEach { user ->
             repeat(numberOfPostsPerUser) {
@@ -182,7 +186,7 @@ class DatabaseSeederImpl @Autowired constructor(
 
     @Async
     private fun addWorkoutLogGroupPosts() {
-        logger.info("Sharing workout logs from users into groups (N..N relationship)...")
+        logger.info("Sharing all workout logs for each user into all groups they are a participant...")
         val workoutLogGroupPosts = mutableListOf<WorkoutLogGroupPost>()
         userRepository.findAll().forEach { user ->
             groupMemberRepository.findAllByUser(user).forEach { groupMember ->
@@ -199,7 +203,7 @@ class DatabaseSeederImpl @Autowired constructor(
             }
         }
         workoutLogGroupPostRepository.saveAll(workoutLogGroupPosts)
-        logger.info("${workoutLogGroupPosts.count()} workout log posts were shared from all users to fill all groups!")
+        logger.info("${workoutLogGroupPosts.count()} workout log posts were shared from each user to fill all groups!")
     }
 
 }

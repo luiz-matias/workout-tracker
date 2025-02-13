@@ -7,4 +7,5 @@ import com.luizmatias.workout_tracker.dto.user.AuthResponseDTO
 interface AuthService {
     fun register(registration: AuthRegisterDTO): AuthResponseDTO
     fun login(credentials: AuthCredentialsDTO): AuthResponseDTO?
+    fun forgotPassword(email: String)
 }

@@ -16,40 +16,4 @@ import org.springframework.web.bind.annotation.*
 class WorkoutLogPostController @Autowired constructor(
     private val userService: UserService,
     private val workoutLogPostService: WorkoutLogPostService,
-) {
-
-    @GetMapping("", "/")
-    fun getAllByUser(@AuthenticationPrincipal userPrincipal: UserPrincipal): ResponseEntity<List<WorkoutLogPost>> {
-        val user =
-            userService.getUserByEmail(userPrincipal.username) ?: throw UnauthorizedException("User not authenticated.")
-        return ResponseEntity.ok(workoutLogPostService.getAllWorkoutLogPostsByUser(user))
-    }
-
-    @GetMapping("/{id}")
-    fun getById(@PathVariable id: Long): ResponseEntity<WorkoutLogPost> {
-        return workoutLogPostService.getWorkoutLogPostById(id)?.let { ResponseEntity.ok(it) }
-            ?: throw NotFoundException("Workout not found")
-    }
-
-    @PostMapping("", "/")
-    fun create(@RequestBody workoutLogPost: WorkoutLogPost): WorkoutLogPost {
-        return workoutLogPostService.createWorkoutLogPost(workoutLogPost)
-    }
-
-    @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody workoutLogPost: WorkoutLogPost): ResponseEntity<WorkoutLogPost> {
-        return workoutLogPostService.updateWorkoutLogPost(id, workoutLogPost)?.let {
-            ResponseEntity.ok(it)
-        } ?: throw NotFoundException("Workout not found")
-    }
-
-    @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long): ResponseEntity<Void> {
-        return if (workoutLogPostService.deleteWorkoutLogPost(id)) {
-            ResponseEntity.noContent().build()
-        } else {
-            throw NotFoundException("Workout not found")
-        }
-    }
-
-}
+)

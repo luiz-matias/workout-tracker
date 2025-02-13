@@ -1,7 +1,10 @@
 package com.luizmatias.workout_tracker.model.user
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.luizmatias.workout_tracker.model.group.Group
 import com.luizmatias.workout_tracker.model.group_members.GroupMember
+import com.luizmatias.workout_tracker.model.temporary_token.TemporaryToken
 import com.luizmatias.workout_tracker.model.workout_log_post.WorkoutLogPost
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
@@ -27,12 +30,18 @@ data class User(
     val twitterUsername: String?,
     @Column(nullable = false)
     @Enumerated(EnumType.STRING) val role: AccountRole,
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @field:JsonIgnoreProperties("user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     val groups: List<GroupMember>,
-    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+    @field:JsonIgnoreProperties("createdBy")
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val createdGroups: List<Group>,
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @field:JsonIgnoreProperties("user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val workoutLogPosts: List<WorkoutLogPost>,
+    @field:JsonIgnoreProperties("createdBy")
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    val temporaryTokens: List<TemporaryToken>,
     @Column(nullable = false)
     val isEnabled: Boolean,
     @CreatedDate

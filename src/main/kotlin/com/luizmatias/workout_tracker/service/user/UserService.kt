@@ -12,6 +12,10 @@ interface UserService {
 
     fun changePassword(id: Long, existingPassword: String, newPassword: String): User
 
+    fun resetPassword(token: String, newPassword: String): User
+
+    fun verifyEmail(token: String): User
+
     fun deleteUser(id: Long): Boolean
 
 }
