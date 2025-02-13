@@ -35,7 +35,7 @@ class UserServiceImpl @Autowired constructor(
 
     override fun updateUser(id: Long, user: User): User? {
         if (userRepository.existsById(id)) {
-            return userRepository.save(user)
+            return userRepository.save(user.copy(id = id))
         }
         return null
     }

@@ -31,6 +31,9 @@ fun AuthRegisterDTO.toUserRegistration(): User = User(
     instagramUsername = this.instagramUsername,
     twitterUsername = this.twitterUsername,
     role = AccountRole.USER,
+    groups = emptyList(),
+    createdGroups = emptyList(),
+    workoutLogPosts = emptyList(),
     isEnabled = true,
     createdAt = Instant.now()
 )
