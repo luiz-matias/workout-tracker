@@ -14,17 +14,23 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/groups")
 class GroupController @Autowired constructor(
     private val userService: UserService,
-    private val groupService: GroupService
+    private val groupService: GroupService,
 ) {
-
     @GetMapping("", "/")
-    fun getAll(@AuthenticationPrincipal principal: UserPrincipal): ResponseEntity<List<GroupResponseDTO>> {
+    fun getAll(
+        @AuthenticationPrincipal principal: UserPrincipal,
+    ): ResponseEntity<List<GroupResponseDTO>> {
         val user = userService.getUserByEmail(principal.username) ?: throw NotFoundException("User not found")
         return ResponseEntity.ok(groupService.getAllGroups(user).map { it.toGroupResponseDTO() })
     }
@@ -32,7 +38,7 @@ class GroupController @Autowired constructor(
     @GetMapping("/{id}")
     fun getById(
         @PathVariable id: Long,
-        @AuthenticationPrincipal principal: UserPrincipal
+        @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<GroupResponseDTO> {
         val user = userService.getUserByEmail(principal.username) ?: throw NotFoundException("User not found")
         return groupService.getGroupById(id, user)?.let { ResponseEntity.ok(it.toGroupResponseDTO()) }
@@ -42,7 +48,7 @@ class GroupController @Autowired constructor(
     @PostMapping("", "/")
     fun create(
         @RequestBody @Valid groupCreationDTO: GroupCreationDTO,
-        @AuthenticationPrincipal principal: UserPrincipal
+        @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<GroupResponseDTO> {
         val user = userService.getUserByEmail(principal.username) ?: throw NotFoundException("User not found")
         val group = groupService.createGroup(groupCreationDTO.toGroup(user))
@@ -52,11 +58,10 @@ class GroupController @Autowired constructor(
     @GetMapping("/{id}/create-invite")
     fun createInvite(
         @PathVariable id: Long,
-        @AuthenticationPrincipal principal: UserPrincipal
+        @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<GroupInviteDTO> {
         val user = userService.getUserByEmail(principal.username) ?: throw NotFoundException("User not found")
         val token = groupService.createInviteToken(id, user)
         return ResponseEntity(GroupInviteDTO(token), HttpStatus.CREATED)
     }
-
 }

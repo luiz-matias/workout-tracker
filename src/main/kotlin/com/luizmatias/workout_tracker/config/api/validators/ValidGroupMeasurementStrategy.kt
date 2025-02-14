@@ -9,13 +9,13 @@ import kotlin.reflect.KClass
     AnnotationTarget.FUNCTION,
     AnnotationTarget.PROPERTY_GETTER,
     AnnotationTarget.PROPERTY_SETTER,
-    AnnotationTarget.FIELD
+    AnnotationTarget.FIELD,
 )
 @Retention(
-    AnnotationRetention.RUNTIME
+    AnnotationRetention.RUNTIME,
 )
 annotation class ValidGroupMeasurementStrategy(
     val message: String = "Invalid group measurement strategy",
     val groups: Array<KClass<*>> = [],
-    val payload: Array<KClass<Any>> = []
+    val payload: Array<KClass<Any>> = [],
 )

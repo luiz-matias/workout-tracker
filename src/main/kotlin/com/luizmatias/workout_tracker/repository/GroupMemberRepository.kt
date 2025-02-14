@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface GroupMemberRepository : JpaRepository<GroupMember, Long> {
-
     @Modifying
     @Transactional
     @Query("DELETE FROM GroupMember")
@@ -23,7 +22,11 @@ interface GroupMemberRepository : JpaRepository<GroupMember, Long> {
     @Query("SELECT gm FROM GroupMember gm WHERE gm.user = :user")
     fun findAllByUser(user: User): List<GroupMember>
 
-    @Query("SELECT CASE WHEN COUNT(gm) > 0 THEN true ELSE false END FROM GroupMember gm WHERE gm.user = :user AND gm.group = :group AND gm.exitedAt IS NULL")
-    fun existsByUserAndGroup(user: User, group: Group): Boolean
-
+    @Query(
+        "SELECT CASE WHEN COUNT(gm) > 0 THEN true ELSE false END FROM GroupMember gm WHERE gm.user = :user AND gm.group = :group AND gm.exitedAt IS NULL",
+    )
+    fun existsByUserAndGroup(
+        user: User,
+        group: Group,
+    ): Boolean
 }

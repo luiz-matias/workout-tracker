@@ -5,15 +5,19 @@ import com.luizmatias.workout_tracker.model.group_members.GroupMember
 import com.luizmatias.workout_tracker.model.user.User
 
 interface GroupMemberService {
-
     fun getAllGroupMembersByGroup(group: Group): List<GroupMember>
 
     fun getAllGroupMembersByUser(user: User): List<GroupMember>
 
-    fun acceptInviteToGroup(groupToken: String, user: User): GroupMember
+    fun acceptInviteToGroup(
+        groupToken: String,
+        user: User,
+    ): GroupMember
 
-    fun updateGroupMember(id: Long, groupMember: GroupMember): GroupMember?
+    fun updateGroupMember(
+        id: Long,
+        groupMember: GroupMember,
+    ): GroupMember?
 
     fun deleteGroupMember(id: Long): Boolean
-
 }

@@ -10,13 +10,13 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface GroupRepository : JpaRepository<Group, Long> {
-
     @Modifying
     @Transactional
     @Query("DELETE FROM Group")
     fun deleteAllGroups()
 
-    @Query("SELECT g FROM Group g INNER JOIN GroupMember gm ON g = gm.group INNER JOIN User u ON gm.user = u WHERE u = :user")
+    @Query(
+        "SELECT g FROM Group g INNER JOIN GroupMember gm ON g = gm.group INNER JOIN User u ON gm.user = u WHERE u = :user",
+    )
     fun findAllByUser(user: User): List<Group>
-
 }

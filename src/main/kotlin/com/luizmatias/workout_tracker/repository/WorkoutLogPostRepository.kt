@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface WorkoutLogPostRepository : JpaRepository<WorkoutLogPost, Long> {
-
     @Modifying
     @Transactional
     @Query("DELETE FROM WorkoutLogPost")
@@ -18,5 +17,4 @@ interface WorkoutLogPostRepository : JpaRepository<WorkoutLogPost, Long> {
 
     @Query("SELECT wlp FROM WorkoutLogPost wlp WHERE wlp.user = :user")
     fun findAllByUser(user: User): List<WorkoutLogPost>
-
 }

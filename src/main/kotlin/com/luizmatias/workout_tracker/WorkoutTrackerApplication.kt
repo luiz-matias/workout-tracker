@@ -1,9 +1,9 @@
 package com.luizmatias.workout_tracker
 
 import com.luizmatias.workout_tracker.config.db.seeder.DatabaseSeeder
+import java.util.TimeZone
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import java.util.*
 
 @SpringBootApplication
 class WorkoutTrackerApplication

@@ -11,24 +11,24 @@ import com.luizmatias.workout_tracker.model.user.User
 import com.luizmatias.workout_tracker.repository.GroupMemberRepository
 import com.luizmatias.workout_tracker.repository.GroupRepository
 import com.luizmatias.workout_tracker.service.temporary_token.TemporaryTokenService
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.*
+import java.util.UUID
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 
 @Service
 class GroupServiceImpl @Autowired constructor(
     private val groupRepository: GroupRepository,
     private val groupMemberRepository: GroupMemberRepository,
-    private val temporaryTokenService: TemporaryTokenService
+    private val temporaryTokenService: TemporaryTokenService,
 ) : GroupService {
+    override fun getAllGroups(user: User): List<Group> = groupRepository.findAllByUser(user)
 
-    override fun getAllGroups(user: User): List<Group> {
-        return groupRepository.findAllByUser(user)
-    }
-
-    override fun getGroupById(id: Long, user: User): Group? {
+    override fun getGroupById(
+        id: Long,
+        user: User,
+    ): Group? {
         val group = groupRepository.findById(id).orElse(null) ?: throw NotFoundException("Group not found.")
         if (!groupMemberRepository.existsByUserAndGroup(user, group)) {
             throw ForbiddenException("You do not have permissions to view this group.")
@@ -45,34 +45,41 @@ class GroupServiceImpl @Autowired constructor(
                 user = user,
                 group = group,
                 workoutLogGroupPosts = emptyList(),
-                joinedAt = Instant.now()
-            )
+                joinedAt = Instant.now(),
+            ),
         )
         return savedGroup
     }
 
-    override fun createInviteToken(groupId: Long, user: User): String {
+    override fun createInviteToken(
+        groupId: Long,
+        user: User,
+    ): String {
         val group = groupRepository.findById(groupId).orElse(null) ?: throw NotFoundException("Group not found.")
         val userIsInGroup = groupMemberRepository.existsByUserAndGroup(user, group)
         if (!userIsInGroup) {
             throw BusinessRuleConflictException("Only members of this group can create invites.")
         }
 
-        val temporaryToken = temporaryTokenService.createTemporaryToken(
-            TemporaryToken(
-                id = null,
-                createdBy = user,
-                token = UUID.randomUUID().toString(),
-                type = TokenType.GROUP_INVITE,
-                extraData = groupId.toString(),
-                expiresAt = Instant.now().plus(7, ChronoUnit.DAYS)
+        val temporaryToken =
+            temporaryTokenService.createTemporaryToken(
+                TemporaryToken(
+                    id = null,
+                    createdBy = user,
+                    token = UUID.randomUUID().toString(),
+                    type = TokenType.GROUP_INVITE,
+                    extraData = groupId.toString(),
+                    expiresAt = Instant.now().plus(7, ChronoUnit.DAYS),
+                ),
             )
-        )
 
         return temporaryToken.token
     }
 
-    override fun updateGroup(id: Long, group: Group): Group? {
+    override fun updateGroup(
+        id: Long,
+        group: Group,
+    ): Group? {
         if (groupRepository.existsById(id)) {
             return groupRepository.save(group.copy(id = id))
         }
@@ -86,6 +93,4 @@ class GroupServiceImpl @Autowired constructor(
         }
         return false
     }
-
-
 }

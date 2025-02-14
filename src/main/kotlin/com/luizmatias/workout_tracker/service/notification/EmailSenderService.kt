@@ -7,10 +7,13 @@ import org.springframework.stereotype.Component
 @Component
 class EmailSenderService @Autowired constructor(
     private val mailgunEmailSender: MailgunEmailSender,
-    private val sendGridEmailSender: SendGridEmailSender
+    private val sendGridEmailSender: SendGridEmailSender,
 ) : NotificationSenderService {
-
-    override fun send(to: String, subject: String, body: String) {
+    override fun send(
+        to: String,
+        subject: String,
+        body: String,
+    ) {
         try {
             mailgunEmailSender.send(to, subject, body)
         } catch (e: InternalServerErrorException) {
@@ -21,5 +24,4 @@ class EmailSenderService @Autowired constructor(
             }
         }
     }
-
 }

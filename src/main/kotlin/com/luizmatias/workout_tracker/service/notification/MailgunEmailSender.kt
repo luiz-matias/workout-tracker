@@ -14,18 +14,23 @@ class MailgunEmailSender(
     @Value("\${sendgrid.from.email}")
     private val applicationEmail: String,
     @Value("\${mailgun.domain}")
-    private val domain: String
+    private val domain: String,
 ) {
-
     private val mailgunMessagesApi = MailgunClient.config(apiKey).createApi(MailgunMessagesApi::class.java)
 
-    fun send(to: String, subject: String, body: String) {
-        val message = Message.builder()
-            .from(applicationEmail)
-            .to(to)
-            .subject(subject)
-            .text(body)
-            .build()
+    fun send(
+        to: String,
+        subject: String,
+        body: String,
+    ) {
+        val message =
+            Message
+                .builder()
+                .from(applicationEmail)
+                .to(to)
+                .subject(subject)
+                .text(body)
+                .build()
 
         try {
             val response = mailgunMessagesApi.sendMessage(domain, message)
@@ -36,5 +41,4 @@ class MailgunEmailSender(
             throw InternalServerErrorException("Failed to send email.")
         }
     }
-
 }

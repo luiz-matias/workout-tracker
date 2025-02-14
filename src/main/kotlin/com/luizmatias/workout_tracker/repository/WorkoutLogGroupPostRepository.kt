@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface WorkoutLogGroupPostRepository : JpaRepository<WorkoutLogGroupPost, Long> {
-
     @Modifying
     @Transactional
     @Query("DELETE FROM WorkoutLogGroupPost")
@@ -22,5 +21,4 @@ interface WorkoutLogGroupPostRepository : JpaRepository<WorkoutLogGroupPost, Lon
 
     @Query("SELECT wlgp FROM WorkoutLogGroupPost wlgp WHERE wlgp.workoutLogPost = :workoutLogPost")
     fun findAllByWorkoutLogPost(workoutLogPost: WorkoutLogPost): List<WorkoutLogGroupPost>
-
 }
