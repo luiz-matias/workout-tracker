@@ -3,10 +3,12 @@ package com.luizmatias.workout_tracker.service.auth.token
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTCreationException
+import com.auth0.jwt.exceptions.JWTVerificationException
 import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.InternalServerErrorException
+import java.time.Instant
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import java.time.Instant
 
 @Service
 class JWTServiceImpl : JWTService {
@@ -19,6 +21,8 @@ class JWTServiceImpl : JWTService {
     @Value("\${jwt.issuer}")
     private lateinit var issuer: String
 
+    private val logger = LoggerFactory.getLogger(JWTServiceImpl::class.java)
+
     override fun generateAccessToken(subject: String): String {
         try {
             val algorithm: Algorithm = Algorithm.HMAC256(secretKey)
@@ -29,6 +33,7 @@ class JWTServiceImpl : JWTService {
                 .withExpiresAt(Instant.now().plusSeconds(expiryTime.toLong()))
                 .sign(algorithm)
         } catch (e: JWTCreationException) {
+            logger.error("Failed to create JWT token: $e")
             throw InternalServerErrorException("Failed to create JWT token.")
         }
     }
@@ -42,7 +47,8 @@ class JWTServiceImpl : JWTService {
                 .build()
                 .verify(token)
                 .subject
-        } catch (e: Exception) {
+        } catch (e: JWTVerificationException) {
+            logger.warn("Failed to validate JWT token: $e")
             return null
         }
     }

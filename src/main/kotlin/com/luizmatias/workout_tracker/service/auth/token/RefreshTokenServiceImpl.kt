@@ -62,6 +62,6 @@ class RefreshTokenServiceImpl @Autowired constructor(
     private fun getExpiryTime() = Instant.now().plusSeconds(refreshTokenExpiryTime.toLong() * DAY_IN_SECONDS)
 
     companion object {
-        private const val DAY_IN_SECONDS = 86400
+        private const val DAY_IN_SECONDS = 86_400
     }
 }

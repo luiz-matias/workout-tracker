@@ -7,6 +7,7 @@ import com.sendgrid.SendGrid
 import com.sendgrid.helpers.mail.Mail
 import com.sendgrid.helpers.mail.objects.Content
 import com.sendgrid.helpers.mail.objects.Email
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
@@ -18,6 +19,8 @@ class SendGridEmailSender(
     @Value("\${sendgrid.from.email}")
     private val applicationEmail: String,
 ) {
+    private val logger = LoggerFactory.getLogger(SendGridEmailSender::class.java)
+
     fun send(
         to: String,
         subject: String,
@@ -39,6 +42,7 @@ class SendGridEmailSender(
                 throw InternalServerErrorException("Failed to send email.")
             }
         } catch (e: Exception) {
+            logger.error("Failed to send email using SendGrid. Error: $e")
             throw InternalServerErrorException("Failed to send email.")
         }
     }

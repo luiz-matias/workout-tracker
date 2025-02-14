@@ -13,7 +13,9 @@ import java.time.Instant
 @Entity
 @Table(name = "refresh_tokens")
 data class RefreshToken(
-    @Id @GeneratedValue val id: Long?,
+    @Id
+    @GeneratedValue
+    val id: Long?,
     @field:JsonIgnoreProperties("groups", "createdGroups", "workoutLogPosts", "temporaryTokens")
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

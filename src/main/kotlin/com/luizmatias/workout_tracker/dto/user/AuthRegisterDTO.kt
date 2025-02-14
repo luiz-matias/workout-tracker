@@ -16,7 +16,7 @@ data class AuthRegisterDTO(
     val email: String,
     @field:Size(min = 3, max = 100)
     val profilePictureUrl: String?,
-    @field:com.luizmatias.workout_tracker.config.api.validators.StrongPassword
+    @field:StrongPassword
     val password: String,
     @field:Size(min = 3, max = 50)
     val instagramUsername: String?,

@@ -69,7 +69,7 @@ class GroupServiceImpl @Autowired constructor(
                     token = UUID.randomUUID().toString(),
                     type = TokenType.GROUP_INVITE,
                     extraData = groupId.toString(),
-                    expiresAt = Instant.now().plus(7, ChronoUnit.DAYS),
+                    expiresAt = Instant.now().plus(GROUP_INVITE_EXPIRATION_DAYS, ChronoUnit.DAYS),
                 ),
             )
 
@@ -92,5 +92,9 @@ class GroupServiceImpl @Autowired constructor(
             return true
         }
         return false
+    }
+
+    companion object {
+        private const val GROUP_INVITE_EXPIRATION_DAYS = 7L
     }
 }

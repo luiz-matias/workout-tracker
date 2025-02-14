@@ -9,5 +9,6 @@ import org.springframework.test.context.ActiveProfiles
 class WorkoutTrackerApplicationTests {
     @Test
     fun contextLoads() {
+        println("Context loaded!")
     }
 }

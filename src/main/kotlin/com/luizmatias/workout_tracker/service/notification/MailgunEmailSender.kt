@@ -4,6 +4,7 @@ import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.Int
 import com.mailgun.api.v3.MailgunMessagesApi
 import com.mailgun.client.MailgunClient
 import com.mailgun.model.message.Message
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
@@ -17,6 +18,7 @@ class MailgunEmailSender(
     private val domain: String,
 ) {
     private val mailgunMessagesApi = MailgunClient.config(apiKey).createApi(MailgunMessagesApi::class.java)
+    private val logger = LoggerFactory.getLogger(MailgunEmailSender::class.java)
 
     fun send(
         to: String,
@@ -38,6 +40,7 @@ class MailgunEmailSender(
                 throw InternalServerErrorException("Failed to send email.")
             }
         } catch (e: Exception) {
+            logger.error("Failed to send email using Mailgun. Error: $e")
             throw InternalServerErrorException("Failed to send email.")
         }
     }

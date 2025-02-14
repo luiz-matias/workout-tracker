@@ -47,7 +47,8 @@ class UserServiceImpl @Autowired constructor(
         notificationSenderService.send(
             user.email,
             "Welcome to Workout Tracker",
-            "Welcome to Workout Tracker, ${user.firstName}! Please verify your email by using the following token: ${verifyEmailToken.token}",
+            "Welcome to Workout Tracker, ${user.firstName}!" +
+                "\nPlease verify your email by using the following token: ${verifyEmailToken.token}",
         )
         return savedUser
     }

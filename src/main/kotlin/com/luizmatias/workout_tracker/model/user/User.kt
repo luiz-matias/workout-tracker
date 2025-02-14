@@ -21,7 +21,8 @@ import org.springframework.data.annotation.CreatedDate
 @Entity
 @Table(name = "users")
 data class User(
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     val id: Long? = null,
     @Column(nullable = false)
     val firstName: String,
@@ -37,7 +38,8 @@ data class User(
     val instagramUsername: String?,
     val twitterUsername: String?,
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING) val role: AccountRole,
+    @Enumerated(EnumType.STRING)
+    val role: AccountRole,
     @field:JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     val groups: List<GroupMember>,

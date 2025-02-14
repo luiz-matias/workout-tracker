@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView
 
 @Controller
 @RequestMapping("\${server.error.path:\${error.path:/error}}")
-private class AppErrorController(
+class AppErrorController(
     errorAttributes: ErrorAttributes?,
     @Value("\${server.http-response.should-show-internal-errors:false}")
     private val shouldShowInternalErrors: Boolean,

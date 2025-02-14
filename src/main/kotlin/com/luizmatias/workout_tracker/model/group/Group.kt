@@ -20,12 +20,15 @@ import org.springframework.data.annotation.CreatedDate
 @Entity
 @Table(name = "groups")
 data class Group(
-    @Id @GeneratedValue val id: Long?,
+    @Id
+    @GeneratedValue
+    val id: Long?,
     @Column(nullable = false)
     val name: String,
     val description: String?,
     val bannerUrl: String?,
-    @Enumerated(EnumType.STRING) val measurementStrategy: GroupMeasurementStrategy,
+    @Enumerated(EnumType.STRING)
+    val measurementStrategy: GroupMeasurementStrategy,
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     val members: List<GroupMember>,
     @field:JsonIgnoreProperties("groups", "createdGroups", "workoutLogPosts", "temporaryTokens")

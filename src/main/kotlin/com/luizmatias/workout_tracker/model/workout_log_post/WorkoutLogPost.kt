@@ -18,7 +18,9 @@ import org.springframework.data.annotation.CreatedDate
 @Entity
 @Table(name = "workout_log_posts")
 data class WorkoutLogPost(
-    @Id @GeneratedValue val id: Long?,
+    @Id
+    @GeneratedValue
+    val id: Long?,
     @field:JsonIgnoreProperties("groups", "createdGroups", "workoutLogPosts", "temporaryTokens")
     @ManyToOne
     @JoinColumn(name = "user_id")

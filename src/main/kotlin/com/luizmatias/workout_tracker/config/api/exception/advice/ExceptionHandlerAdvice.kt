@@ -6,6 +6,7 @@ import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.Not
 import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.UnauthorizedException
 import com.luizmatias.workout_tracker.dto.common.ErrorResponseDTO
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.converter.HttpMessageConversionException
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class ExceptionHandlerAdvice {
+    @Value("\${server.http-response.should-show-internal-errors:false}")
+    private val shouldShowInternalErrors: Boolean = false
+
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(InternalServerErrorException::class)
     fun handleExplicitInternalServerErrorException(
@@ -82,7 +86,7 @@ class ExceptionHandlerAdvice {
     ): ErrorResponseDTO =
         ErrorResponseDTO(
             status = HttpStatus.BAD_REQUEST.value(),
-            error = "Malformed data",
+            error = "Malformed data" + if (shouldShowInternalErrors) ": ${exception.message}" else "",
             path = request.requestURI,
         )
 
@@ -94,7 +98,7 @@ class ExceptionHandlerAdvice {
     ): ErrorResponseDTO =
         ErrorResponseDTO(
             status = HttpStatus.BAD_REQUEST.value(),
-            error = "Malformed data",
+            error = "Malformed data" + if (shouldShowInternalErrors) ": ${exception.message}" else "",
             path = request.requestURI,
         )
 
