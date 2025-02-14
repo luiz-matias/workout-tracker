@@ -12,8 +12,7 @@ class WorkoutTrackerApplicationIntegrationTests {
     @Test
     fun contextLoads() {
         println("Context loaded successfully!")
-        Thread.sleep(3000)
-        Assert.isTrue(1 == 2, "Context loaded successfully!")
+        Thread.sleep(15000)
     }
 
 }
