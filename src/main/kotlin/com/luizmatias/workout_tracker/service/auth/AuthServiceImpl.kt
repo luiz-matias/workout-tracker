@@ -15,6 +15,7 @@ import com.luizmatias.workout_tracker.service.user.UserService
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.UUID
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -29,6 +30,8 @@ class AuthServiceImpl @Autowired constructor(
     private val temporaryTokenService: TemporaryTokenService,
     private val notificationSenderService: NotificationSenderService,
 ) : AuthService {
+    private val logger = LoggerFactory.getLogger(AuthServiceImpl::class.java)
+
     override fun register(registration: AuthRegisterDTO): AuthResponseDTO {
         val addedUser = userService.registerUser(registration.toUserRegistration())
         return AuthResponseDTO(
@@ -57,6 +60,7 @@ class AuthServiceImpl @Autowired constructor(
                 }
             }
         } catch (e: AuthenticationException) {
+            logger.info("Failed to log user: $e")
             throw UnauthorizedException("Invalid credentials")
         }
         return null
@@ -73,7 +77,7 @@ class AuthServiceImpl @Autowired constructor(
                         token = UUID.randomUUID().toString(),
                         type = TokenType.RESET_PASSWORD,
                         extraData = null,
-                        expiresAt = Instant.now().plus(15, ChronoUnit.MINUTES),
+                        expiresAt = Instant.now().plus(RESET_PASSWORD_EXPIRATION_MINUTES, ChronoUnit.MINUTES),
                     ),
                 )
 
@@ -83,5 +87,9 @@ class AuthServiceImpl @Autowired constructor(
                 "Use the following token to reset your password: ${token.token}",
             )
         }
+    }
+
+    companion object {
+        private const val RESET_PASSWORD_EXPIRATION_MINUTES = 15L
     }
 }

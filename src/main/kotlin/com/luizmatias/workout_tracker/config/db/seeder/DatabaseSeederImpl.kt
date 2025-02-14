@@ -164,7 +164,7 @@ class DatabaseSeederImpl @Autowired constructor(
         }
         groupMemberRepository.saveAll(groupMembers)
         logger.info(
-            "${groupMembers.count()} member registrations were created to add $numberOfUsersPerGroup users into all groups!",
+            "${groupMembers.count()} group joins were created to add $numberOfUsersPerGroup users into all groups!",
         )
     }
 
