@@ -16,7 +16,10 @@ interface GroupRepository : JpaRepository<Group, Long> {
     fun deleteAllGroups()
 
     @Query(
-        "SELECT g FROM Group g INNER JOIN GroupMember gm ON g = gm.group INNER JOIN User u ON gm.user = u WHERE u = :user",
+        "SELECT g FROM Group g" +
+            "INNER JOIN GroupMember gm ON g = gm.group" +
+            "INNER JOIN User u ON gm.user = u" +
+            "WHERE u = :user",
     )
     fun findAllByUser(user: User): List<Group>
 }

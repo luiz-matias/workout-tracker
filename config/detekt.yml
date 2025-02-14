@@ -33,7 +33,7 @@ complexity:
         excludes: [ '**/integrationTest/**', '**/test/**', '**/functionalTest/**' ]
     LongParameterList:
         active: true
-        excludes: [ 'DatabaseSeederImpl.kt' ]
+        excludes: [ '**/DatabaseSeederImpl.kt' ]
 
 coroutines:
     active: true
@@ -65,6 +65,8 @@ exceptions:
         active: true
     ThrowingNewInstanceOfSameException:
         active: true
+    TooGenericExceptionCaught:
+        active: false
 
 naming:
     ClassNaming:
@@ -130,6 +132,7 @@ style:
     CascadingCallWrapping:
         active: true
         includeElvis: false
+        excludes: [ '**/SecurityConfig.kt' ]
     ClassOrdering:
         active: true
     CollapsibleIfStatements:
@@ -190,7 +193,7 @@ style:
         active: true
         ignoreOverridden: true
     MagicNumber:
-        excludes: [ '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
+        excludes: [ '**/DatabaseSeederImpl.kt', '**/test/**', '**/*Test.kt', '**/*Spec.kt' ]
         ignorePropertyDeclaration: true
         ignoreAnnotation: true
         ignoreEnums: true

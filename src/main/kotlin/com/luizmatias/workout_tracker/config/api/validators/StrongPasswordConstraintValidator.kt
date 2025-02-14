@@ -19,7 +19,7 @@ class StrongPasswordConstraintValidator : ConstraintValidator<StrongPassword, St
         val validator =
             PasswordValidator(
                 mutableListOf(
-                    LengthRule(8, 50), // Should have between 8 and 50 characters
+                    LengthRule(MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH), // Should have between 8 and 50 characters
                     CharacterRule(EnglishCharacterData.UpperCase, 1), // Should have at least 1 uppercase digit
                     CharacterRule(EnglishCharacterData.LowerCase, 1), // Should have at least 1 lowercase digit
                     CharacterRule(EnglishCharacterData.Digit, 1), // Should have at least 1 digit
@@ -27,17 +27,17 @@ class StrongPasswordConstraintValidator : ConstraintValidator<StrongPassword, St
                     WhitespaceRule(), // Should not have whitespaces
                     IllegalSequenceRule(
                         EnglishSequenceData.Alphabetical,
-                        3,
+                        MAX_SEQUENCE_LENGTH,
                         false,
                     ), // Should not have numerical sequences (like abcde)
                     IllegalSequenceRule(
                         EnglishSequenceData.Numerical,
-                        3,
+                        MAX_SEQUENCE_LENGTH,
                         false,
                     ), // Should not have numerical sequences (like 12345)
                     IllegalSequenceRule(
                         EnglishSequenceData.USQwerty,
-                        3,
+                        MAX_SEQUENCE_LENGTH,
                         false,
                     ), // Should not have keyboard sequences (like qwerty)
                 ),
@@ -56,5 +56,11 @@ class StrongPasswordConstraintValidator : ConstraintValidator<StrongPassword, St
             .addConstraintViolation()
             .disableDefaultConstraintViolation()
         return false
+    }
+
+    companion object {
+        private const val MIN_PASSWORD_LENGTH = 8
+        private const val MAX_PASSWORD_LENGTH = 50
+        private const val MAX_SEQUENCE_LENGTH = 3
     }
 }
