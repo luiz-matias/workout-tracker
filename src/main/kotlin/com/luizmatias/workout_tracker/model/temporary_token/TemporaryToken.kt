@@ -16,13 +16,16 @@ import java.time.Instant
 @Entity
 @Table(name = "temporary_tokens")
 data class TemporaryToken(
-    @Id @GeneratedValue val id: Long?,
+    @Id
+    @GeneratedValue
+    val id: Long?,
     @field:JsonIgnoreProperties("groups", "createdGroups", "workoutLogPosts", "temporaryTokens")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val createdBy: User,
     val token: String,
-    @Enumerated(EnumType.STRING) val type: TokenType,
+    @Enumerated(EnumType.STRING)
+    val type: TokenType,
     val extraData: String? = null,
     val expiresAt: Instant,
 ) {

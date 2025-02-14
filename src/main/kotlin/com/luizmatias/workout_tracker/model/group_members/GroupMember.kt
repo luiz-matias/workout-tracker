@@ -20,7 +20,8 @@ import org.springframework.data.annotation.CreatedDate
 @Entity
 @Table(name = "group_members")
 data class GroupMember(
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     val id: Long?,
     @field:JsonIgnoreProperties("groups", "createdGroups", "workoutLogPosts", "temporaryTokens")
     @ManyToOne
