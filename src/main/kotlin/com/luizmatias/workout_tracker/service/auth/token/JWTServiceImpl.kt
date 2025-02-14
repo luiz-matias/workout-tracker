@@ -10,7 +10,6 @@ import java.time.Instant
 
 @Service
 class JWTServiceImpl : JWTService {
-
     @Value("\${jwt.secret}")
     private lateinit var secretKey: String
 
@@ -23,7 +22,8 @@ class JWTServiceImpl : JWTService {
     override fun generateAccessToken(subject: String): String {
         try {
             val algorithm: Algorithm = Algorithm.HMAC256(secretKey)
-            return JWT.create()
+            return JWT
+                .create()
                 .withIssuer(issuer)
                 .withSubject(subject)
                 .withExpiresAt(Instant.now().plusSeconds(expiryTime.toLong()))
@@ -36,7 +36,8 @@ class JWTServiceImpl : JWTService {
     override fun validateAndGetSubjectFromToken(token: String): String? {
         val algorithm: Algorithm = Algorithm.HMAC256(secretKey)
         return try {
-            JWT.require(algorithm)
+            JWT
+                .require(algorithm)
                 .withIssuer(issuer)
                 .build()
                 .verify(token)
@@ -45,5 +46,4 @@ class JWTServiceImpl : JWTService {
             return null
         }
     }
-
 }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserRepository : JpaRepository<User, Long> {
-
     @Query("SELECT u FROM User u WHERE u.email = :email")
     fun findByEmail(email: String): User?
 
@@ -17,5 +16,4 @@ interface UserRepository : JpaRepository<User, Long> {
     @Transactional
     @Query("DELETE FROM User")
     fun deleteAllUsers()
-
 }

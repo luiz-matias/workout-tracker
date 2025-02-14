@@ -10,24 +10,21 @@ import com.luizmatias.workout_tracker.model.user.User
 import com.luizmatias.workout_tracker.repository.UserRepository
 import com.luizmatias.workout_tracker.service.notification.NotificationSenderService
 import com.luizmatias.workout_tracker.service.temporary_token.TemporaryTokenService
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import java.util.UUID
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import java.util.*
 
 @Service
 class UserServiceImpl @Autowired constructor(
     private val userRepository: UserRepository,
     private val notificationSenderService: NotificationSenderService,
     private val temporaryTokenService: TemporaryTokenService,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
 ) : UserService {
-
-    override fun getUserByEmail(email: String): User? {
-        return userRepository.findByEmail(email)
-    }
+    override fun getUserByEmail(email: String): User? = userRepository.findByEmail(email)
 
     override fun registerUser(user: User): User {
         val userEncrypted = user.copy(password = passwordEncoder.encode(user.password))
@@ -36,32 +33,40 @@ class UserServiceImpl @Autowired constructor(
         }
         val savedUser = userRepository.save(userEncrypted)
 
-        val verifyEmailToken = temporaryTokenService.createTemporaryToken(
-            TemporaryToken(
-                id = null,
-                createdBy = savedUser,
-                token = UUID.randomUUID().toString(),
-                type = TokenType.VERIFY_EMAIL,
-                expiresAt = Instant.now().plus(1, ChronoUnit.HOURS)
+        val verifyEmailToken =
+            temporaryTokenService.createTemporaryToken(
+                TemporaryToken(
+                    id = null,
+                    createdBy = savedUser,
+                    token = UUID.randomUUID().toString(),
+                    type = TokenType.VERIFY_EMAIL,
+                    expiresAt = Instant.now().plus(1, ChronoUnit.HOURS),
+                ),
             )
-        )
 
         notificationSenderService.send(
             user.email,
             "Welcome to Workout Tracker",
-            "Welcome to Workout Tracker, ${user.firstName}! Please verify your email by using the following token: ${verifyEmailToken.token}"
+            "Welcome to Workout Tracker, ${user.firstName}! Please verify your email by using the following token: ${verifyEmailToken.token}",
         )
         return savedUser
     }
 
-    override fun updateUser(id: Long, user: User): User? {
+    override fun updateUser(
+        id: Long,
+        user: User,
+    ): User? {
         if (userRepository.existsById(id)) {
             return userRepository.save(user.copy(id = id))
         }
         return null
     }
 
-    override fun changePassword(id: Long, existingPassword: String, newPassword: String): User {
+    override fun changePassword(
+        id: Long,
+        existingPassword: String,
+        newPassword: String,
+    ): User {
         val user = userRepository.findById(id).orElse(null) ?: throw NotFoundException("User not found.")
 
         if (!passwordEncoder.matches(existingPassword, user.password)) {
@@ -72,12 +77,15 @@ class UserServiceImpl @Autowired constructor(
         notificationSenderService.send(
             user.email,
             "Password changed",
-            "Your password has been changed successfully."
+            "Your password has been changed successfully.",
         )
         return savedUser
     }
 
-    override fun resetPassword(token: String, newPassword: String): User {
+    override fun resetPassword(
+        token: String,
+        newPassword: String,
+    ): User {
         val temporaryToken =
             temporaryTokenService.getTemporaryTokenByToken(token) ?: throw NotFoundException("Token not found.")
 
@@ -96,7 +104,7 @@ class UserServiceImpl @Autowired constructor(
         notificationSenderService.send(
             user.email,
             "Password changed",
-            "Your password has been changed successfully. If that was not you, please contact our support immediately."
+            "Your password has been changed successfully. If that was not you, please contact our support immediately.",
         )
         return savedUser
     }
@@ -128,5 +136,4 @@ class UserServiceImpl @Autowired constructor(
         }
         return false
     }
-
 }

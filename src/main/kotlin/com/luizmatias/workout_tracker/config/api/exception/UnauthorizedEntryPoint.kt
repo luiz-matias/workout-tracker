@@ -6,16 +6,14 @@ import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 
 class UnauthorizedEntryPoint : AuthenticationEntryPoint {
-
     override fun commence(
         request: HttpServletRequest?,
         response: HttpServletResponse?,
-        authException: AuthenticationException?
+        authException: AuthenticationException?,
     ) {
         response?.sendError(
             HttpServletResponse.SC_UNAUTHORIZED,
-            "Unauthorized: Authentication token is either missing, invalid or expired."
+            "Unauthorized: Authentication token is either missing, invalid or expired.",
         )
     }
-
 }

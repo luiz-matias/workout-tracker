@@ -17,24 +17,25 @@ fun User.toUserDTO(): UserResponseDTO =
         email = this.email,
         profilePictureUrl = this.profilePictureUrl,
         instagramUsername = this.instagramUsername,
-        twitterUsername = this.twitterUsername
+        twitterUsername = this.twitterUsername,
     )
 
-fun AuthRegisterDTO.toUserRegistration(): User = User(
-    id = null,
-    firstName = this.firstName,
-    lastName = this.lastName,
-    email = this.email,
-    isEmailVerified = false,
-    profilePictureUrl = this.profilePictureUrl,
-    password = this.password,
-    instagramUsername = this.instagramUsername,
-    twitterUsername = this.twitterUsername,
-    role = AccountRole.USER,
-    groups = emptyList(),
-    createdGroups = emptyList(),
-    workoutLogPosts = emptyList(),
-    temporaryTokens = emptyList(),
-    isEnabled = true,
-    createdAt = Instant.now()
-)
+fun AuthRegisterDTO.toUserRegistration(): User =
+    User(
+        id = null,
+        firstName = this.firstName,
+        lastName = this.lastName,
+        email = this.email,
+        isEmailVerified = false,
+        profilePictureUrl = this.profilePictureUrl,
+        password = this.password,
+        instagramUsername = this.instagramUsername,
+        twitterUsername = this.twitterUsername,
+        role = AccountRole.USER,
+        groups = emptyList(),
+        createdGroups = emptyList(),
+        workoutLogPosts = emptyList(),
+        temporaryTokens = emptyList(),
+        isEnabled = true,
+        createdAt = Instant.now(),
+    )

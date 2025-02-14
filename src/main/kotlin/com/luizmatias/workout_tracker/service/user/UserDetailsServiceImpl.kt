@@ -8,8 +8,9 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 
 @Service
-class UserDetailsServiceImpl @Autowired constructor(private val userRepository: UserRepository) : UserDetailsService {
-
+class UserDetailsServiceImpl @Autowired constructor(
+    private val userRepository: UserRepository,
+) : UserDetailsService {
     override fun loadUserByUsername(username: String?): UserDetails? {
         if (username == null) {
             return null
@@ -19,5 +20,4 @@ class UserDetailsServiceImpl @Autowired constructor(private val userRepository: 
 
         return user.toPrincipal()
     }
-
 }

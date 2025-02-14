@@ -10,18 +10,22 @@ import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/token")
 class TemporaryTokenController @Autowired constructor(
     private val userService: UserService,
-    private val groupMemberService: GroupMemberService
+    private val groupMemberService: GroupMemberService,
 ) {
-
     @GetMapping("/verify-email/{emailToken}")
     fun verifyEmail(
-        @PathVariable emailToken: String
+        @PathVariable emailToken: String,
     ): ResponseEntity<MessageResponseDTO> {
         userService.verifyEmail(emailToken)
         return ResponseEntity.ok(MessageResponseDTO("Email verified successfully."))
@@ -39,12 +43,12 @@ class TemporaryTokenController @Autowired constructor(
     @GetMapping("/join/{groupToken}")
     fun joinGroupViaTemporaryToken(
         @PathVariable groupToken: String,
-        @AuthenticationPrincipal principal: UserPrincipal
+        @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<MessageResponseDTO> {
-        val user = userService.getUserByEmail(principal.username)
-            ?: throw UnauthorizedException("You need to be authenticated in order to accept invites.")
+        val user =
+            userService.getUserByEmail(principal.username)
+                ?: throw UnauthorizedException("You need to be authenticated in order to accept invites.")
         groupMemberService.acceptInviteToGroup(groupToken, user)
         return ResponseEntity.ok(MessageResponseDTO("User successfully joined the group."))
     }
-
 }

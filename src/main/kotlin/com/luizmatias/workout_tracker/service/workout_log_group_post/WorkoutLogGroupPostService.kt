@@ -5,7 +5,6 @@ import com.luizmatias.workout_tracker.model.workout_log_group_post.WorkoutLogGro
 import com.luizmatias.workout_tracker.model.workout_log_post.WorkoutLogPost
 
 interface WorkoutLogGroupPostService {
-
     fun getAllWorkoutLogGroupPostsByGroupMember(groupMember: GroupMember): List<WorkoutLogGroupPost>
 
     fun getAllWorkoutLogGroupPostsByWorkoutLogPost(workoutLogPost: WorkoutLogPost): List<WorkoutLogGroupPost>
@@ -14,8 +13,10 @@ interface WorkoutLogGroupPostService {
 
     fun createWorkoutGroupLogPost(workoutLogGroupPost: WorkoutLogGroupPost): WorkoutLogGroupPost
 
-    fun updateWorkoutGroupLogPost(id: Long, workoutLogGroupPost: WorkoutLogGroupPost): WorkoutLogGroupPost?
+    fun updateWorkoutGroupLogPost(
+        id: Long,
+        workoutLogGroupPost: WorkoutLogGroupPost,
+    ): WorkoutLogGroupPost?
 
     fun deleteWorkoutGroupLogPost(id: Long): Boolean
-
 }

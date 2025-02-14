@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface TemporaryTokenRepository : JpaRepository<TemporaryToken, Long> {
-
     @Query("SELECT t FROM TemporaryToken t WHERE t.token = :token")
     fun findByToken(token: String): TemporaryToken?
 
@@ -17,5 +16,4 @@ interface TemporaryTokenRepository : JpaRepository<TemporaryToken, Long> {
     @Transactional
     @Query("DELETE FROM TemporaryToken")
     fun deleteAllTemporaryTokens()
-
 }

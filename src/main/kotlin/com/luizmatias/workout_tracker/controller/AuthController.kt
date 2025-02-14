@@ -22,17 +22,20 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/auth")
 class AuthController @Autowired constructor(
     private val authService: AuthService,
-    private val refreshTokenService: RefreshTokenService
+    private val refreshTokenService: RefreshTokenService,
 ) {
-
     @PostMapping("/register")
-    fun registerUser(@RequestBody @Valid authRegisterDTO: AuthRegisterDTO): ResponseEntity<AuthResponseDTO> {
+    fun registerUser(
+        @RequestBody @Valid authRegisterDTO: AuthRegisterDTO,
+    ): ResponseEntity<AuthResponseDTO> {
         val response = authService.register(authRegisterDTO)
         return ResponseEntity.ok(response)
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody @Valid authCredentialsDTO: AuthCredentialsDTO): ResponseEntity<AuthResponseDTO> {
+    fun login(
+        @RequestBody @Valid authCredentialsDTO: AuthCredentialsDTO,
+    ): ResponseEntity<AuthResponseDTO> {
         val response = authService.login(authCredentialsDTO)
         return if (response != null) {
             ResponseEntity.ok(response)
@@ -42,15 +45,20 @@ class AuthController @Autowired constructor(
     }
 
     @PostMapping("/refresh-token")
-    fun refreshToken(@RequestBody @Valid refreshTokenDTO: RefreshTokenRequestDTO): ResponseEntity<TokenDTO> {
+    fun refreshToken(
+        @RequestBody @Valid refreshTokenDTO: RefreshTokenRequestDTO,
+    ): ResponseEntity<TokenDTO> {
         val response = refreshTokenService.regenerateTokens(refreshTokenDTO.refreshToken)
         return ResponseEntity.ok(response)
     }
 
     @PostMapping("/forgot-password")
-    fun forgotPassword(@RequestBody @Valid forgotPasswordRequestDTO: ForgotPasswordRequestDTO): ResponseEntity<MessageResponseDTO> {
+    fun forgotPassword(
+        @RequestBody @Valid forgotPasswordRequestDTO: ForgotPasswordRequestDTO,
+    ): ResponseEntity<MessageResponseDTO> {
         authService.forgotPassword(forgotPasswordRequestDTO.email)
-        return ResponseEntity.ok(MessageResponseDTO("A password reset was sent to the provided email (in case of existing email)."))
+        return ResponseEntity.ok(
+            MessageResponseDTO("A password reset was sent to the provided email (in case of existing email)."),
+        )
     }
-
 }

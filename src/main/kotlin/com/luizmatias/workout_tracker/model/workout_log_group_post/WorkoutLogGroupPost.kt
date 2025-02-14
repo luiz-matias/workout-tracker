@@ -3,14 +3,20 @@ package com.luizmatias.workout_tracker.model.workout_log_group_post
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.luizmatias.workout_tracker.model.group_members.GroupMember
 import com.luizmatias.workout_tracker.model.workout_log_post.WorkoutLogPost
-import jakarta.persistence.*
-import org.springframework.data.annotation.CreatedDate
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
 import java.time.Instant
+import org.springframework.data.annotation.CreatedDate
 
 @Entity
 @Table(name = "workout_log_group_posts")
 data class WorkoutLogGroupPost(
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     val id: Long?,
     @field:JsonIgnoreProperties("workoutLogGroupPosts")
     @ManyToOne
@@ -22,5 +28,5 @@ data class WorkoutLogGroupPost(
     val groupMember: GroupMember,
     @CreatedDate
     val createdAt: Instant,
-    val deletedAt: Instant? = null
+    val deletedAt: Instant? = null,
 )

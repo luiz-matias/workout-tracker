@@ -21,17 +21,18 @@ class GroupMemberServiceImpl @Autowired constructor(
     private val groupMemberRepository: GroupMemberRepository,
     private val temporaryTokenService: TemporaryTokenService,
 ) : GroupMemberService {
-    override fun getAllGroupMembersByGroup(group: Group): List<GroupMember> {
-        return groupMemberRepository.findAllByGroup(group)
-    }
+    override fun getAllGroupMembersByGroup(group: Group): List<GroupMember> =
+        groupMemberRepository.findAllByGroup(group)
 
-    override fun getAllGroupMembersByUser(user: User): List<GroupMember> {
-        return groupMemberRepository.findAllByUser(user)
-    }
+    override fun getAllGroupMembersByUser(user: User): List<GroupMember> = groupMemberRepository.findAllByUser(user)
 
-    override fun acceptInviteToGroup(groupToken: String, user: User): GroupMember {
-        val temporaryToken = temporaryTokenService
-            .getTemporaryTokenByToken(groupToken) ?: throw NotFoundException("Invite not found.")
+    override fun acceptInviteToGroup(
+        groupToken: String,
+        user: User,
+    ): GroupMember {
+        val temporaryToken =
+            temporaryTokenService
+                .getTemporaryTokenByToken(groupToken) ?: throw NotFoundException("Invite not found.")
 
         if (temporaryToken.isExpired()) {
             temporaryTokenService.deleteTemporaryToken(temporaryToken)
@@ -44,8 +45,9 @@ class GroupMemberServiceImpl @Autowired constructor(
 
         val groupId =
             temporaryToken.extraData?.toLongOrNull() ?: throw NotFoundException("Group from invite not found.")
-        val group = groupService.getGroupById(groupId, temporaryToken.createdBy)
-            ?: throw NotFoundException("Group from invite not found.")
+        val group =
+            groupService.getGroupById(groupId, temporaryToken.createdBy)
+                ?: throw NotFoundException("Group from invite not found.")
 
         if (groupMemberRepository.existsByUserAndGroup(user, group)) {
             throw BusinessRuleConflictException("User already in group.")
@@ -57,12 +59,15 @@ class GroupMemberServiceImpl @Autowired constructor(
                 user = user,
                 group = group,
                 workoutLogGroupPosts = emptyList(),
-                joinedAt = Instant.now()
-            )
+                joinedAt = Instant.now(),
+            ),
         )
     }
 
-    override fun updateGroupMember(id: Long, groupMember: GroupMember): GroupMember? {
+    override fun updateGroupMember(
+        id: Long,
+        groupMember: GroupMember,
+    ): GroupMember? {
         if (groupMemberRepository.existsById(id)) {
             return groupMemberRepository.save(groupMember.copy(id = id))
         }
@@ -76,6 +81,4 @@ class GroupMemberServiceImpl @Autowired constructor(
         }
         return false
     }
-
-
 }

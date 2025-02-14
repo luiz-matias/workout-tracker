@@ -15,34 +15,37 @@ import org.springframework.web.filter.OncePerRequestFilter
 @Component
 class AccessTokenSecurityFilter @Autowired constructor(
     private val userDetailsService: UserDetailsService,
-    private val jwtService: JWTService
+    private val jwtService: JWTService,
 ) : OncePerRequestFilter() {
-
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
-        val jwtToken = request.recoverToken() ?: run {
-            filterChain.doFilter(request, response)
-            return
-        }
+        val jwtToken =
+            request.recoverToken() ?: run {
+                filterChain.doFilter(request, response)
+                return
+            }
 
-        val email = jwtService.validateAndGetSubjectFromToken(jwtToken) ?: run {
-            filterChain.doFilter(request, response)
-            return
-        }
+        val email =
+            jwtService.validateAndGetSubjectFromToken(jwtToken) ?: run {
+                filterChain.doFilter(request, response)
+                return
+            }
 
-        val userDetails = userDetailsService.loadUserByUsername(email) ?: run {
-            filterChain.doFilter(request, response)
-            return
-        }
+        val userDetails =
+            userDetailsService.loadUserByUsername(email) ?: run {
+                filterChain.doFilter(request, response)
+                return
+            }
 
-        val authenticationToken = UsernamePasswordAuthenticationToken(
-            userDetails,
-            null,
-            userDetails.authorities
-        )
+        val authenticationToken =
+            UsernamePasswordAuthenticationToken(
+                userDetails,
+                null,
+                userDetails.authorities,
+            )
 
         authenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
         SecurityContextHolder.getContext().authentication = authenticationToken

@@ -7,16 +7,22 @@ import com.luizmatias.workout_tracker.model.user.AccountRole
 import com.luizmatias.workout_tracker.model.user.User
 import com.luizmatias.workout_tracker.model.workout_log_group_post.WorkoutLogGroupPost
 import com.luizmatias.workout_tracker.model.workout_log_post.WorkoutLogPost
-import com.luizmatias.workout_tracker.repository.*
+import com.luizmatias.workout_tracker.repository.GroupMemberRepository
+import com.luizmatias.workout_tracker.repository.GroupRepository
+import com.luizmatias.workout_tracker.repository.RefreshTokenRepository
+import com.luizmatias.workout_tracker.repository.TemporaryTokenRepository
+import com.luizmatias.workout_tracker.repository.UserRepository
+import com.luizmatias.workout_tracker.repository.WorkoutLogGroupPostRepository
+import com.luizmatias.workout_tracker.repository.WorkoutLogPostRepository
 import jakarta.transaction.Transactional
+import java.time.Instant
+import java.util.UUID
 import net.datafaker.Faker
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.Async
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
-import java.time.Instant
-import java.util.*
 
 @Component
 @Transactional
@@ -28,9 +34,8 @@ class DatabaseSeederImpl @Autowired constructor(
     private val workoutLogPostRepository: WorkoutLogPostRepository,
     private val workoutLogGroupPostRepository: WorkoutLogGroupPostRepository,
     private val temporaryTokenRepository: TemporaryTokenRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
 ) : DatabaseSeeder {
-
     private val faker = Faker()
     private val logger = LoggerFactory.getLogger(DatabaseSeederImpl::class.java)
 
@@ -78,8 +83,8 @@ class DatabaseSeederImpl @Autowired constructor(
                 workoutLogPosts = emptyList(),
                 temporaryTokens = emptyList(),
                 isEnabled = true,
-                createdAt = Instant.now()
-            )
+                createdAt = Instant.now(),
+            ),
         )
         val users = mutableListOf<User>()
         val userPassword = passwordEncoder.encode(faker.internet().password(8, 25, true, true, true))
@@ -93,7 +98,7 @@ class DatabaseSeederImpl @Autowired constructor(
                     lastName = lastName,
                     email = "${UUID.randomUUID()}@${faker.internet().domainName()}",
                     isEmailVerified = faker.bool().bool(),
-                    profilePictureUrl = "https://api.dicebear.com/9.x/notionists/svg?seed=${firstName}%20${lastName}",
+                    profilePictureUrl = "https://api.dicebear.com/9.x/notionists/svg?seed=$firstName%20$lastName",
                     password = userPassword,
                     instagramUsername = faker.internet().username(),
                     twitterUsername = faker.internet().username(),
@@ -103,8 +108,8 @@ class DatabaseSeederImpl @Autowired constructor(
                     workoutLogPosts = emptyList(),
                     temporaryTokens = emptyList(),
                     isEnabled = true,
-                    createdAt = Instant.now()
-                )
+                    createdAt = Instant.now(),
+                ),
             )
         }
         userRepository.saveAll(users)
@@ -128,8 +133,8 @@ class DatabaseSeederImpl @Autowired constructor(
                     measurementStrategy = GroupMeasurementStrategy.NUMBER_OF_ACTIVITIES,
                     members = emptyList(),
                     createdBy = users.random(),
-                    createdAt = Instant.now()
-                )
+                    createdAt = Instant.now(),
+                ),
             )
         }
         groupRepository.saveAll(groups)
@@ -151,14 +156,16 @@ class DatabaseSeederImpl @Autowired constructor(
                         group = group,
                         workoutLogGroupPosts = emptyList(),
                         joinedAt = Instant.now(),
-                        exitedAt = null
-                    )
+                        exitedAt = null,
+                    ),
                 )
                 users.remove(user)
             }
         }
         groupMemberRepository.saveAll(groupMembers)
-        logger.info("${groupMembers.count()} member registrations were created to add $numberOfUsersPerGroup users into all groups!")
+        logger.info(
+            "${groupMembers.count()} member registrations were created to add $numberOfUsersPerGroup users into all groups!",
+        )
     }
 
     @Async
@@ -175,8 +182,8 @@ class DatabaseSeederImpl @Autowired constructor(
                         photoUrl = "https://api.dicebear.com/9.x/notionists/svg?seed=${faker.lorem().sentence(5)}",
                         description = faker.lorem().maxLengthSentence(100),
                         workoutLogGroupPosts = emptyList(),
-                        createdAt = Instant.now()
-                    )
+                        createdAt = Instant.now(),
+                    ),
                 )
             }
         }
@@ -197,7 +204,7 @@ class DatabaseSeederImpl @Autowired constructor(
                             workoutLogPost = workoutLogPost,
                             groupMember = groupMember,
                             createdAt = Instant.now(),
-                        )
+                        ),
                     )
                 }
             }
@@ -205,5 +212,4 @@ class DatabaseSeederImpl @Autowired constructor(
         workoutLogGroupPostRepository.saveAll(workoutLogGroupPosts)
         logger.info("${workoutLogGroupPosts.count()} workout log posts were shared from each user to fill all groups!")
     }
-
 }

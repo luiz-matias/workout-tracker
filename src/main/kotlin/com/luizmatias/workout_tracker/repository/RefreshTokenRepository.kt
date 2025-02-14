@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RefreshTokenRepository : JpaRepository<RefreshToken, Long> {
-
     @Query("SELECT r FROM RefreshToken r WHERE r.token = :token")
     fun findByToken(token: String): RefreshToken?
 
@@ -21,5 +20,4 @@ interface RefreshTokenRepository : JpaRepository<RefreshToken, Long> {
     @Transactional
     @Query("DELETE FROM RefreshToken")
     fun deleteAllRefreshTokens()
-
 }

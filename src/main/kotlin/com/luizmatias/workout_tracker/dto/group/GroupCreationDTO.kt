@@ -13,5 +13,5 @@ data class GroupCreationDTO(
     @field:Size(min = 3, max = 100)
     val bannerUrl: String?,
     @field:ValidGroupMeasurementStrategy
-    val measurementStrategy: String
+    val measurementStrategy: String,
 )

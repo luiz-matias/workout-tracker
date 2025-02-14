@@ -9,5 +9,5 @@ data class GroupResponseDTO(
     val description: String?,
     val bannerUrl: String?,
     val measurementStrategy: GroupMeasurementStrategy,
-    val members: List<UserResponseDTO>?
+    val members: List<UserResponseDTO>?,
 )

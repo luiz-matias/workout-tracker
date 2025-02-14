@@ -10,25 +10,24 @@ import org.springframework.stereotype.Service
 
 @Service
 class WorkoutGroupLogPostServiceImpl @Autowired constructor(
-    private val workoutLogGroupPostRepository: WorkoutLogGroupPostRepository
+    private val workoutLogGroupPostRepository: WorkoutLogGroupPostRepository,
 ) : WorkoutLogGroupPostService {
-    override fun getAllWorkoutLogGroupPostsByGroupMember(groupMember: GroupMember): List<WorkoutLogGroupPost> {
-        return workoutLogGroupPostRepository.findAllByGroupMember(groupMember)
-    }
+    override fun getAllWorkoutLogGroupPostsByGroupMember(groupMember: GroupMember): List<WorkoutLogGroupPost> =
+        workoutLogGroupPostRepository.findAllByGroupMember(groupMember)
 
-    override fun getAllWorkoutLogGroupPostsByWorkoutLogPost(workoutLogPost: WorkoutLogPost): List<WorkoutLogGroupPost> {
-        return workoutLogGroupPostRepository.findAllByWorkoutLogPost(workoutLogPost)
-    }
+    override fun getAllWorkoutLogGroupPostsByWorkoutLogPost(workoutLogPost: WorkoutLogPost): List<WorkoutLogGroupPost> =
+        workoutLogGroupPostRepository.findAllByWorkoutLogPost(workoutLogPost)
 
-    override fun getWorkoutGroupLogPostById(id: Long): WorkoutLogGroupPost? {
-        return workoutLogGroupPostRepository.findById(id).orElse(null)
-    }
+    override fun getWorkoutGroupLogPostById(id: Long): WorkoutLogGroupPost? =
+        workoutLogGroupPostRepository.findById(id).orElse(null)
 
-    override fun createWorkoutGroupLogPost(workoutLogGroupPost: WorkoutLogGroupPost): WorkoutLogGroupPost {
-        return workoutLogGroupPostRepository.save(workoutLogGroupPost)
-    }
+    override fun createWorkoutGroupLogPost(workoutLogGroupPost: WorkoutLogGroupPost): WorkoutLogGroupPost =
+        workoutLogGroupPostRepository.save(workoutLogGroupPost)
 
-    override fun updateWorkoutGroupLogPost(id: Long, workoutLogGroupPost: WorkoutLogGroupPost): WorkoutLogGroupPost? {
+    override fun updateWorkoutGroupLogPost(
+        id: Long,
+        workoutLogGroupPost: WorkoutLogGroupPost,
+    ): WorkoutLogGroupPost? {
         if (workoutLogGroupPostRepository.existsById(id)) {
             return workoutLogGroupPostRepository.save(workoutLogGroupPost.copy(id = id))
         }
@@ -42,6 +41,4 @@ class WorkoutGroupLogPostServiceImpl @Autowired constructor(
         }
         return false
     }
-
-
 }

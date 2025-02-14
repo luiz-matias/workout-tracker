@@ -8,22 +8,20 @@ import org.springframework.stereotype.Service
 
 @Service
 class WorkoutLogPostServiceImpl @Autowired constructor(
-    private val workoutLogPostRepository: WorkoutLogPostRepository
+    private val workoutLogPostRepository: WorkoutLogPostRepository,
 ) : WorkoutLogPostService {
+    override fun getAllWorkoutLogPostsByUser(user: User): List<WorkoutLogPost> =
+        workoutLogPostRepository.findAllByUser(user)
 
-    override fun getAllWorkoutLogPostsByUser(user: User): List<WorkoutLogPost> {
-        return workoutLogPostRepository.findAllByUser(user)
-    }
+    override fun getWorkoutLogPostById(id: Long): WorkoutLogPost? = workoutLogPostRepository.findById(id).orElse(null)
 
-    override fun getWorkoutLogPostById(id: Long): WorkoutLogPost? {
-        return workoutLogPostRepository.findById(id).orElse(null)
-    }
+    override fun createWorkoutLogPost(workoutLogPost: WorkoutLogPost): WorkoutLogPost =
+        workoutLogPostRepository.save(workoutLogPost)
 
-    override fun createWorkoutLogPost(workoutLogPost: WorkoutLogPost): WorkoutLogPost {
-        return workoutLogPostRepository.save(workoutLogPost)
-    }
-
-    override fun updateWorkoutLogPost(id: Long, workoutLogPost: WorkoutLogPost): WorkoutLogPost? {
+    override fun updateWorkoutLogPost(
+        id: Long,
+        workoutLogPost: WorkoutLogPost,
+    ): WorkoutLogPost? {
         if (workoutLogPostRepository.existsById(id)) {
             return workoutLogPostRepository.save(workoutLogPost.copy(id = id))
         }
@@ -37,6 +35,4 @@ class WorkoutLogPostServiceImpl @Autowired constructor(
         }
         return false
     }
-
-
 }
