@@ -4,6 +4,11 @@ plugins {
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "2.1.0"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
+}
+
+ktlint {
+    version.set("1.5.0")
 }
 
 group = "com.luizmatias"
@@ -75,17 +80,21 @@ sourceSets.create("integrationTest") {
     }
 }
 
-configurations[sourceSets["integrationTest"].implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
-configurations[sourceSets["integrationTest"].runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
+configurations[sourceSets["integrationTest"].implementationConfigurationName].extendsFrom(
+    configurations.testImplementation.get(),
+)
+configurations[sourceSets["integrationTest"].runtimeOnlyConfigurationName].extendsFrom(
+    configurations.testRuntimeOnly.get(),
+)
 
-
-val integrationTestTask = tasks.register<Test>("integrationTest") {
-    description = "Runs the integration tests"
-    group = "verification"
-    testClassesDirs = sourceSets["integrationTest"].output.classesDirs
-    classpath = sourceSets["integrationTest"].runtimeClasspath
-    shouldRunAfter(tasks["test"])
-}
+val integrationTestTask =
+    tasks.register<Test>("integrationTest") {
+        description = "Runs the integration tests"
+        group = "verification"
+        testClassesDirs = sourceSets["integrationTest"].output.classesDirs
+        classpath = sourceSets["integrationTest"].runtimeClasspath
+        shouldRunAfter(tasks["test"])
+    }
 
 tasks.check {
     dependsOn(integrationTestTask)
@@ -95,6 +104,6 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-tasks.withType<Copy>{
+tasks.withType<Copy> {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
