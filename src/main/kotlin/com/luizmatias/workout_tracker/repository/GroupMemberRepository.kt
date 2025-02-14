@@ -23,7 +23,7 @@ interface GroupMemberRepository : JpaRepository<GroupMember, Long> {
     fun findAllByUser(user: User): List<GroupMember>
 
     @Query(
-        "SELECT CASE WHEN COUNT(gm) > 0 THEN true ELSE false END FROM GroupMember gm" +
+        "SELECT CASE WHEN COUNT(gm) > 0 THEN true ELSE false END FROM GroupMember gm " +
             "WHERE gm.user = :user AND gm.group = :group AND gm.exitedAt IS NULL",
     )
     fun existsByUserAndGroup(
