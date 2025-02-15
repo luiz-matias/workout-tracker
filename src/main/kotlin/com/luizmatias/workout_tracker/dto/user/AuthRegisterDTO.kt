@@ -12,6 +12,7 @@ data class AuthRegisterDTO(
     @field:NotBlank
     @field:Size(min = 2, max = 50)
     val lastName: String,
+    @field:NotBlank
     @field:Email
     val email: String,
     @field:Size(min = 3, max = 100)

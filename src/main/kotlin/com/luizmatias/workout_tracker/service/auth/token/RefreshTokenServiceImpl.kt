@@ -17,7 +17,7 @@ class RefreshTokenServiceImpl @Autowired constructor(
     private val refreshTokenRepository: RefreshTokenRepository,
 ) : RefreshTokenService {
     @Value("\${jwt.refresh-token-expiry-time-in-days}")
-    private lateinit var refreshTokenExpiryTime: String
+    private val refreshTokenExpiryTime: String? = null
 
     override fun generateTokensFromUserAuth(user: User): TokenDTO {
         var refreshToken =
@@ -59,7 +59,8 @@ class RefreshTokenServiceImpl @Autowired constructor(
 
     private fun getRandomUUID() = UUID.randomUUID().toString()
 
-    private fun getExpiryTime() = Instant.now().plusSeconds(refreshTokenExpiryTime.toLong() * DAY_IN_SECONDS)
+    private fun getExpiryTime() =
+        Instant.now().plusSeconds((refreshTokenExpiryTime?.toLongOrNull() ?: 1) * DAY_IN_SECONDS)
 
     companion object {
         private const val DAY_IN_SECONDS = 86_400

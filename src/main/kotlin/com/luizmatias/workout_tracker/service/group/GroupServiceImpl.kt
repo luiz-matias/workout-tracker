@@ -37,7 +37,7 @@ class GroupServiceImpl @Autowired constructor(
     }
 
     override fun createGroup(group: Group): Group {
-        val user = group.createdBy!!
+        val user = group.createdBy ?: throw BusinessRuleConflictException("Group must have a creator.")
         val savedGroup = groupRepository.save(group)
         groupMemberRepository.save(
             GroupMember(
