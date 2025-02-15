@@ -51,10 +51,10 @@ class StrongPasswordConstraintValidator : ConstraintValidator<StrongPassword, St
 
         val messages = validator.getMessages(result)
         val messageTemplate = java.lang.String.join(", ", messages)
-        context!!
-            .buildConstraintViolationWithTemplate(messageTemplate)
-            .addConstraintViolation()
-            .disableDefaultConstraintViolation()
+        context
+            ?.buildConstraintViolationWithTemplate(messageTemplate)
+            ?.addConstraintViolation()
+            ?.disableDefaultConstraintViolation()
         return false
     }
 

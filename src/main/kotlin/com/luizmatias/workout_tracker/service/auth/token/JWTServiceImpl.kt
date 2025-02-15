@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service
 @Service
 class JWTServiceImpl : JWTService {
     @Value("\${jwt.secret}")
-    private lateinit var secretKey: String
+    private val secretKey: String? = null
 
     @Value("\${jwt.access-token-expiry-time-in-seconds}")
-    private lateinit var expiryTime: String
+    private val expiryTime: String? = null
 
     @Value("\${jwt.issuer}")
-    private lateinit var issuer: String
+    private val issuer: String? = null
 
     private val logger = LoggerFactory.getLogger(JWTServiceImpl::class.java)
 
@@ -30,7 +30,7 @@ class JWTServiceImpl : JWTService {
                 .create()
                 .withIssuer(issuer)
                 .withSubject(subject)
-                .withExpiresAt(Instant.now().plusSeconds(expiryTime.toLong()))
+                .withExpiresAt(Instant.now().plusSeconds(expiryTime?.toLongOrNull() ?: 0))
                 .sign(algorithm)
         } catch (e: JWTCreationException) {
             logger.error("Failed to create JWT token: $e")
