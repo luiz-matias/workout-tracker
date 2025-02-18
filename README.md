@@ -13,7 +13,7 @@
 
 ## Basic Business Rules (Functional Requirements)
 
-- [ ] Project Setup
+- [X] Project Setup
     - [X] Readme About the Project
     - [X] List of epics and stories
     - [X] Environment Preparation
