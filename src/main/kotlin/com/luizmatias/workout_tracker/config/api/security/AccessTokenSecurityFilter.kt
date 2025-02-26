@@ -54,7 +54,13 @@ class AccessTokenSecurityFilter @Autowired constructor(
     }
 
     fun HttpServletRequest.recoverToken(): String? {
-        val authHeader = this.getHeader("Authorization") ?: return null
-        return authHeader.replace("Bearer ", "")
+        val authHeader = this.getHeader(AUTHORIZATION_HEADER) ?: return null
+        return authHeader.replace("$BEARER_PREFIX ", "")
     }
+
+    companion object {
+        private const val AUTHORIZATION_HEADER = "Authorization"
+        private const val BEARER_PREFIX = "Bearer"
+    }
+
 }
