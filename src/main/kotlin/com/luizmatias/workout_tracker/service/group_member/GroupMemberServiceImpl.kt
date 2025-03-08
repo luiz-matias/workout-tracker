@@ -14,6 +14,8 @@ import com.luizmatias.workout_tracker.service.temporary_token.TemporaryTokenServ
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 
 @Service
 class GroupMemberServiceImpl @Autowired constructor(
@@ -21,10 +23,10 @@ class GroupMemberServiceImpl @Autowired constructor(
     private val groupMemberRepository: GroupMemberRepository,
     private val temporaryTokenService: TemporaryTokenService,
 ) : GroupMemberService {
-    override fun getAllGroupMembersByGroup(group: Group): List<GroupMember> =
-        groupMemberRepository.findAllByGroup(group)
+    override fun getAllGroupMembersByGroup(group: Group, pageable: Pageable): Page<GroupMember> =
+        groupMemberRepository.findAllByGroup(group, pageable)
 
-    override fun getAllGroupMembersByUser(user: User): List<GroupMember> = groupMemberRepository.findAllByUser(user)
+    override fun getAllGroupMembersByUser(user: User, pageable: Pageable): Page<GroupMember> = groupMemberRepository.findAllByUser(user, pageable)
 
     override fun acceptInviteToGroup(
         groupToken: String,
