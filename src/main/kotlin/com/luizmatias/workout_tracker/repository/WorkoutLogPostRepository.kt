@@ -18,5 +18,8 @@ interface WorkoutLogPostRepository : JpaRepository<WorkoutLogPost, Long> {
     fun deleteAllWorkoutLogPosts()
 
     @Query("SELECT wlp FROM WorkoutLogPost wlp WHERE wlp.user = :user")
-    fun findAllByUser(user: User, pageable: Pageable): Page<WorkoutLogPost>
+    fun findAllByUser(
+        user: User,
+        pageable: Pageable,
+    ): Page<WorkoutLogPost>
 }

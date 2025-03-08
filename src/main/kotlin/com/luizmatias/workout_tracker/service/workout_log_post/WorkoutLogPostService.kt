@@ -6,7 +6,10 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface WorkoutLogPostService {
-    fun getAllWorkoutLogPostsByUser(user: User, pageable: Pageable): Page<WorkoutLogPost>
+    fun getAllWorkoutLogPostsByUser(
+        user: User,
+        pageable: Pageable,
+    ): Page<WorkoutLogPost>
 
     fun getWorkoutLogPostById(id: Long): WorkoutLogPost?
 

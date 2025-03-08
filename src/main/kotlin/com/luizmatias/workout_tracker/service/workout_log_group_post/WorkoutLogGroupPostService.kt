@@ -7,9 +7,15 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface WorkoutLogGroupPostService {
-    fun getAllWorkoutLogGroupPostsByGroupMember(groupMember: GroupMember, pageable: Pageable): Page<WorkoutLogGroupPost>
+    fun getAllWorkoutLogGroupPostsByGroupMember(
+        groupMember: GroupMember,
+        pageable: Pageable,
+    ): Page<WorkoutLogGroupPost>
 
-    fun getAllWorkoutLogGroupPostsByWorkoutLogPost(workoutLogPost: WorkoutLogPost, pageable: Pageable): Page<WorkoutLogGroupPost>
+    fun getAllWorkoutLogGroupPostsByWorkoutLogPost(
+        workoutLogPost: WorkoutLogPost,
+        pageable: Pageable,
+    ): Page<WorkoutLogGroupPost>
 
     fun getWorkoutGroupLogPostById(id: Long): WorkoutLogGroupPost?
 

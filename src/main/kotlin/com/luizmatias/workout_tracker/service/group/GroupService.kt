@@ -6,7 +6,10 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface GroupService {
-    fun getAllGroups(user: User, pageable: Pageable): Page<Group>
+    fun getAllGroups(
+        user: User,
+        pageable: Pageable,
+    ): Page<Group>
 
     fun getGroupById(
         id: Long,

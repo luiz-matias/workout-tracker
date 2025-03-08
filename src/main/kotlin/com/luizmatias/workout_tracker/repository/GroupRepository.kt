@@ -23,5 +23,8 @@ interface GroupRepository : JpaRepository<Group, Long> {
             "INNER JOIN User u ON gm.user = u " +
             "WHERE u = :user",
     )
-    fun findAllByUser(user: User, pageable: Pageable): Page<Group>
+    fun findAllByUser(
+        user: User,
+        pageable: Pageable,
+    ): Page<Group>
 }

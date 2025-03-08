@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service
 class WorkoutLogPostServiceImpl @Autowired constructor(
     private val workoutLogPostRepository: WorkoutLogPostRepository,
 ) : WorkoutLogPostService {
-    override fun getAllWorkoutLogPostsByUser(user: User, pageable: Pageable): Page<WorkoutLogPost> =
-        workoutLogPostRepository.findAllByUser(user, pageable)
+    override fun getAllWorkoutLogPostsByUser(
+        user: User,
+        pageable: Pageable,
+    ): Page<WorkoutLogPost> = workoutLogPostRepository.findAllByUser(user, pageable)
 
     override fun getWorkoutLogPostById(id: Long): WorkoutLogPost? = workoutLogPostRepository.findById(id).orElse(null)
 

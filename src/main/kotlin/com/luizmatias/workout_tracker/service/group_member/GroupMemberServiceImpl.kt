@@ -23,10 +23,15 @@ class GroupMemberServiceImpl @Autowired constructor(
     private val groupMemberRepository: GroupMemberRepository,
     private val temporaryTokenService: TemporaryTokenService,
 ) : GroupMemberService {
-    override fun getAllGroupMembersByGroup(group: Group, pageable: Pageable): Page<GroupMember> =
-        groupMemberRepository.findAllByGroup(group, pageable)
+    override fun getAllGroupMembersByGroup(
+        group: Group,
+        pageable: Pageable,
+    ): Page<GroupMember> = groupMemberRepository.findAllByGroup(group, pageable)
 
-    override fun getAllGroupMembersByUser(user: User, pageable: Pageable): Page<GroupMember> = groupMemberRepository.findAllByUser(user, pageable)
+    override fun getAllGroupMembersByUser(
+        user: User,
+        pageable: Pageable,
+    ): Page<GroupMember> = groupMemberRepository.findAllByUser(user, pageable)
 
     override fun acceptInviteToGroup(
         groupToken: String,

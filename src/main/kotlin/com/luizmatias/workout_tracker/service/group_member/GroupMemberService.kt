@@ -7,9 +7,15 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface GroupMemberService {
-    fun getAllGroupMembersByGroup(group: Group, pageable: Pageable): Page<GroupMember>
+    fun getAllGroupMembersByGroup(
+        group: Group,
+        pageable: Pageable,
+    ): Page<GroupMember>
 
-    fun getAllGroupMembersByUser(user: User, pageable: Pageable): Page<GroupMember>
+    fun getAllGroupMembersByUser(
+        user: User,
+        pageable: Pageable,
+    ): Page<GroupMember>
 
     fun acceptInviteToGroup(
         groupToken: String,

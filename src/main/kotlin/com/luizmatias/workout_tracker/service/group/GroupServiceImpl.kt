@@ -25,8 +25,10 @@ class GroupServiceImpl @Autowired constructor(
     private val groupMemberRepository: GroupMemberRepository,
     private val temporaryTokenService: TemporaryTokenService,
 ) : GroupService {
-    override fun getAllGroups(user: User, pageable: Pageable): Page<Group> =
-        groupRepository.findAllByUser(user, pageable)
+    override fun getAllGroups(
+        user: User,
+        pageable: Pageable,
+    ): Page<Group> = groupRepository.findAllByUser(user, pageable)
 
     override fun getGroupById(
         id: Long,

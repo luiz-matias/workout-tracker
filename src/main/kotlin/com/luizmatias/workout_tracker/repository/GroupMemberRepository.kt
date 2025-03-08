@@ -19,10 +19,16 @@ interface GroupMemberRepository : JpaRepository<GroupMember, Long> {
     fun deleteAllGroupMembers()
 
     @Query("SELECT gm FROM GroupMember gm WHERE gm.group = :group")
-    fun findAllByGroup(group: Group, pageable: Pageable): Page<GroupMember>
+    fun findAllByGroup(
+        group: Group,
+        pageable: Pageable,
+    ): Page<GroupMember>
 
     @Query("SELECT gm FROM GroupMember gm WHERE gm.user = :user")
-    fun findAllByUser(user: User, pageable: Pageable): Page<GroupMember>
+    fun findAllByUser(
+        user: User,
+        pageable: Pageable,
+    ): Page<GroupMember>
 
     @Query(
         "SELECT CASE WHEN COUNT(gm) > 0 THEN true ELSE false END FROM GroupMember gm " +

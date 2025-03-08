@@ -39,7 +39,12 @@ class GroupController @Autowired constructor(
         @Valid pageRequestDTO: PageRequestDTO,
     ): ResponseEntity<PageResponseDTO<GroupResponseDTO>> {
         val user = userService.getUserByEmail(principal.username) ?: throw UserNotFoundException()
-        return ResponseEntity.ok(groupService.getAllGroups(user, pageRequestDTO.toPageRequest()).toPageResponseDTO(Group::toGroupResponseDTO))
+        return ResponseEntity.ok(
+            groupService.getAllGroups(
+                user,
+                pageRequestDTO.toPageRequest(),
+            ).toPageResponseDTO(Group::toGroupResponseDTO),
+        )
     }
 
     @GetMapping("/{id}")

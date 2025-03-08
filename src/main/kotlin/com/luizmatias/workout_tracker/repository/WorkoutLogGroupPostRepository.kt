@@ -19,8 +19,14 @@ interface WorkoutLogGroupPostRepository : JpaRepository<WorkoutLogGroupPost, Lon
     fun deleteAllWorkoutLogGroupPosts()
 
     @Query("SELECT wlgp FROM WorkoutLogGroupPost wlgp WHERE wlgp.groupMember = :groupMember")
-    fun findAllByGroupMember(groupMember: GroupMember, pageable: Pageable): Page<WorkoutLogGroupPost>
+    fun findAllByGroupMember(
+        groupMember: GroupMember,
+        pageable: Pageable,
+    ): Page<WorkoutLogGroupPost>
 
     @Query("SELECT wlgp FROM WorkoutLogGroupPost wlgp WHERE wlgp.workoutLogPost = :workoutLogPost")
-    fun findAllByWorkoutLogPost(workoutLogPost: WorkoutLogPost, pageable: Pageable): Page<WorkoutLogGroupPost>
+    fun findAllByWorkoutLogPost(
+        workoutLogPost: WorkoutLogPost,
+        pageable: Pageable,
+    ): Page<WorkoutLogGroupPost>
 }
