@@ -20,6 +20,7 @@ import java.util.UUID
 import net.datafaker.Faker
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Pageable
 import org.springframework.scheduling.annotation.Async
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
@@ -73,7 +74,7 @@ class DatabaseSeederImpl @Autowired constructor(
                 lastName = "Matias",
                 email = "luizmatias@luizmatias.com",
                 isEmailVerified = true,
-                profilePictureUrl = "https://api.dicebear.com/9.x/notionists/svg?seed=Luiz%20Matias",
+                profilePictureUrl = "https://api.dicebear.com/9.x/notionists/png?seed=Luiz%20Matias",
                 password = password,
                 instagramUsername = "souluizmatias",
                 twitterUsername = "luizmatiasdev",
@@ -98,7 +99,7 @@ class DatabaseSeederImpl @Autowired constructor(
                     lastName = lastName,
                     email = "${UUID.randomUUID()}@${faker.internet().domainName()}",
                     isEmailVerified = faker.bool().bool(),
-                    profilePictureUrl = "https://api.dicebear.com/9.x/notionists/svg?seed=$firstName%20$lastName",
+                    profilePictureUrl = "https://api.dicebear.com/9.x/notionists/png?seed=$firstName%20$lastName",
                     password = userPassword,
                     instagramUsername = faker.internet().username(),
                     twitterUsername = faker.internet().username(),
@@ -127,7 +128,7 @@ class DatabaseSeederImpl @Autowired constructor(
                     id = null,
                     name = faker.lorem().maxLengthSentence(20),
                     description = faker.lorem().maxLengthSentence(100),
-                    bannerUrl = "https://api.dicebear.com/9.x/notionists/svg?seed=${
+                    bannerUrl = "https://api.dicebear.com/9.x/notionists/png?seed=${
                         faker.lorem().maxLengthSentence(5)
                     }",
                     measurementStrategy = GroupMeasurementStrategy.NUMBER_OF_ACTIVITIES,
@@ -179,7 +180,7 @@ class DatabaseSeederImpl @Autowired constructor(
                         id = null,
                         user = user,
                         name = faker.lorem().maxLengthSentence(20),
-                        photoUrl = "https://api.dicebear.com/9.x/notionists/svg?seed=${faker.lorem().sentence(5)}",
+                        photoUrl = "https://api.dicebear.com/9.x/notionists/png?seed=${faker.lorem().sentence(5)}",
                         description = faker.lorem().maxLengthSentence(100),
                         workoutLogGroupPosts = emptyList(),
                         createdAt = Instant.now(),
@@ -196,8 +197,8 @@ class DatabaseSeederImpl @Autowired constructor(
         logger.info("Sharing all workout logs for each user into all groups they are a participant...")
         val workoutLogGroupPosts = mutableListOf<WorkoutLogGroupPost>()
         userRepository.findAll().forEach { user ->
-            groupMemberRepository.findAllByUser(user).forEach { groupMember ->
-                workoutLogPostRepository.findAllByUser(user).forEach { workoutLogPost ->
+            groupMemberRepository.findAllByUser(user, Pageable.unpaged()).forEach { groupMember ->
+                workoutLogPostRepository.findAllByUser(user, Pageable.unpaged()).forEach { workoutLogPost ->
                     workoutLogGroupPosts.add(
                         WorkoutLogGroupPost(
                             id = null,
