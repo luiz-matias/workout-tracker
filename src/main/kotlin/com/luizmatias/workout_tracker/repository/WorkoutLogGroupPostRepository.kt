@@ -4,6 +4,8 @@ import com.luizmatias.workout_tracker.model.group_members.GroupMember
 import com.luizmatias.workout_tracker.model.workout_log_group_post.WorkoutLogGroupPost
 import com.luizmatias.workout_tracker.model.workout_log_post.WorkoutLogPost
 import jakarta.transaction.Transactional
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -17,8 +19,14 @@ interface WorkoutLogGroupPostRepository : JpaRepository<WorkoutLogGroupPost, Lon
     fun deleteAllWorkoutLogGroupPosts()
 
     @Query("SELECT wlgp FROM WorkoutLogGroupPost wlgp WHERE wlgp.groupMember = :groupMember")
-    fun findAllByGroupMember(groupMember: GroupMember): List<WorkoutLogGroupPost>
+    fun findAllByGroupMember(
+        groupMember: GroupMember,
+        pageable: Pageable,
+    ): Page<WorkoutLogGroupPost>
 
     @Query("SELECT wlgp FROM WorkoutLogGroupPost wlgp WHERE wlgp.workoutLogPost = :workoutLogPost")
-    fun findAllByWorkoutLogPost(workoutLogPost: WorkoutLogPost): List<WorkoutLogGroupPost>
+    fun findAllByWorkoutLogPost(
+        workoutLogPost: WorkoutLogPost,
+        pageable: Pageable,
+    ): Page<WorkoutLogGroupPost>
 }

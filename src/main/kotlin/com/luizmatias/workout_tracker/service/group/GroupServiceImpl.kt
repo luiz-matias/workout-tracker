@@ -15,6 +15,8 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -23,7 +25,10 @@ class GroupServiceImpl @Autowired constructor(
     private val groupMemberRepository: GroupMemberRepository,
     private val temporaryTokenService: TemporaryTokenService,
 ) : GroupService {
-    override fun getAllGroups(user: User): List<Group> = groupRepository.findAllByUser(user)
+    override fun getAllGroups(
+        user: User,
+        pageable: Pageable,
+    ): Page<Group> = groupRepository.findAllByUser(user, pageable)
 
     override fun getGroupById(
         id: Long,

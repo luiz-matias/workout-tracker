@@ -2,11 +2,16 @@ package com.luizmatias.workout_tracker.controller
 
 import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.NotFoundException
 import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.UserNotFoundException
+import com.luizmatias.workout_tracker.dto.common.PageRequestDTO
+import com.luizmatias.workout_tracker.dto.common.PageResponseDTO
 import com.luizmatias.workout_tracker.dto.group.GroupCreationDTO
 import com.luizmatias.workout_tracker.dto.group.GroupInviteDTO
 import com.luizmatias.workout_tracker.dto.group.GroupResponseDTO
 import com.luizmatias.workout_tracker.dto.mapper.toGroup
 import com.luizmatias.workout_tracker.dto.mapper.toGroupResponseDTO
+import com.luizmatias.workout_tracker.dto.mapper.toPageRequest
+import com.luizmatias.workout_tracker.dto.mapper.toPageResponseDTO
+import com.luizmatias.workout_tracker.model.group.Group
 import com.luizmatias.workout_tracker.model.user.UserPrincipal
 import com.luizmatias.workout_tracker.service.group.GroupService
 import com.luizmatias.workout_tracker.service.user.UserService
@@ -31,9 +36,15 @@ class GroupController @Autowired constructor(
     @GetMapping("", "/")
     fun getAll(
         @AuthenticationPrincipal principal: UserPrincipal,
-    ): ResponseEntity<List<GroupResponseDTO>> {
+        @Valid pageRequestDTO: PageRequestDTO,
+    ): ResponseEntity<PageResponseDTO<GroupResponseDTO>> {
         val user = userService.getUserByEmail(principal.username) ?: throw UserNotFoundException()
-        return ResponseEntity.ok(groupService.getAllGroups(user).map { it.toGroupResponseDTO() })
+        return ResponseEntity.ok(
+            groupService.getAllGroups(
+                user,
+                pageRequestDTO.toPageRequest(),
+            ).toPageResponseDTO(Group::toGroupResponseDTO),
+        )
     }
 
     @GetMapping("/{id}")
@@ -56,8 +67,8 @@ class GroupController @Autowired constructor(
         return ResponseEntity(group.toGroupResponseDTO(), HttpStatus.CREATED)
     }
 
-    @GetMapping("/{id}/create-invite")
-    fun createInvite(
+    @GetMapping("/{id}/get-invite")
+    fun getInvite(
         @PathVariable id: Long,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<GroupInviteDTO> {
