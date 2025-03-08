@@ -62,5 +62,4 @@ class AccessTokenSecurityFilter @Autowired constructor(
         private const val AUTHORIZATION_HEADER = "Authorization"
         private const val BEARER_PREFIX = "Bearer"
     }
-
 }
