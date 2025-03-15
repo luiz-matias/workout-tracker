@@ -1,6 +1,5 @@
 package com.luizmatias.workout_tracker.controller
 
-import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.UserNotFoundException
 import com.luizmatias.workout_tracker.dto.common.PageRequestDTO
 import com.luizmatias.workout_tracker.dto.common.PageResponseDTO
 import com.luizmatias.workout_tracker.dto.group.GroupCreationDTO

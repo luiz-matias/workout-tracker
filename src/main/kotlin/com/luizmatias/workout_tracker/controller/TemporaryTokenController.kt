@@ -1,6 +1,5 @@
 package com.luizmatias.workout_tracker.controller
 
-import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.UnauthorizedException
 import com.luizmatias.workout_tracker.dto.common.MessageResponseDTO
 import com.luizmatias.workout_tracker.dto.password_reset.PasswordResetRequestDTO
 import com.luizmatias.workout_tracker.model.user.UserPrincipal
