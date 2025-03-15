@@ -57,4 +57,8 @@ data class User(
     @CreatedDate
     val createdAt: Instant,
     val deletedAt: Instant? = null,
-)
+) {
+    fun isSysAdmin(): Boolean = role == AccountRole.SYS_ADMIN
+
+    fun isAdmin(): Boolean = role == AccountRole.SYS_ADMIN || role == AccountRole.ADMIN
+}

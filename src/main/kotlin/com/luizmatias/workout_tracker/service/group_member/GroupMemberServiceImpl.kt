@@ -23,12 +23,12 @@ class GroupMemberServiceImpl @Autowired constructor(
     private val groupMemberRepository: GroupMemberRepository,
     private val temporaryTokenService: TemporaryTokenService,
 ) : GroupMemberService {
-    override fun getAllGroupMembersByGroup(
+    override fun getAllGroupRegistrationsByGroup(
         group: Group,
         pageable: Pageable,
     ): Page<GroupMember> = groupMemberRepository.findAllByGroup(group, pageable)
 
-    override fun getAllGroupMembersByUser(
+    override fun getAllGroupRegistrationsByUser(
         user: User,
         pageable: Pageable,
     ): Page<GroupMember> = groupMemberRepository.findAllByUser(user, pageable)
@@ -52,9 +52,7 @@ class GroupMemberServiceImpl @Autowired constructor(
 
         val groupId =
             temporaryToken.extraData?.toLongOrNull() ?: throw NotFoundException("Group from invite not found.")
-        val group =
-            groupService.getGroupById(groupId, temporaryToken.createdBy)
-                ?: throw NotFoundException("Group from invite not found.")
+        val group = groupService.getGroupById(groupId, temporaryToken.createdBy)
 
         if (groupMemberRepository.existsByUserAndGroup(user, group)) {
             throw BusinessRuleConflictException("User already in group.")
@@ -71,21 +69,18 @@ class GroupMemberServiceImpl @Autowired constructor(
         )
     }
 
-    override fun updateGroupMember(
-        id: Long,
-        groupMember: GroupMember,
-    ): GroupMember? {
-        if (groupMemberRepository.existsById(id)) {
-            return groupMemberRepository.save(groupMember.copy(id = id))
-        }
-        return null
-    }
+    override fun exitFromGroup(
+        group: Group,
+        user: User,
+    ) {
+        var groupMember =
+            groupMemberRepository.findByGroupAndUser(group, user)
+                ?: throw NotFoundException("User is not in this group.")
 
-    override fun deleteGroupMember(id: Long): Boolean {
-        if (groupMemberRepository.existsById(id)) {
-            groupMemberRepository.deleteById(id)
-            return true
-        }
-        return false
+        groupMember =
+            groupMember.copy(
+                exitedAt = Instant.now(),
+            )
+        groupMemberRepository.save(groupMember)
     }
 }

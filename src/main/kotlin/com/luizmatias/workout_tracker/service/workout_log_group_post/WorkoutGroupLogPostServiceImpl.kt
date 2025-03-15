@@ -1,5 +1,6 @@
 package com.luizmatias.workout_tracker.service.workout_log_group_post
 
+import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.NotFoundException
 import com.luizmatias.workout_tracker.model.group_members.GroupMember
 import com.luizmatias.workout_tracker.model.workout_log_group_post.WorkoutLogGroupPost
 import com.luizmatias.workout_tracker.model.workout_log_post.WorkoutLogPost
@@ -24,8 +25,10 @@ class WorkoutGroupLogPostServiceImpl @Autowired constructor(
         pageable: Pageable,
     ): Page<WorkoutLogGroupPost> = workoutLogGroupPostRepository.findAllByWorkoutLogPost(workoutLogPost, pageable)
 
-    override fun getWorkoutGroupLogPostById(id: Long): WorkoutLogGroupPost? =
-        workoutLogGroupPostRepository.findById(id).orElse(null)
+    override fun getWorkoutGroupLogPostById(id: Long): WorkoutLogGroupPost =
+        workoutLogGroupPostRepository.findById(id).orElseThrow {
+            NotFoundException("Workout log group post not found.")
+        }
 
     override fun createWorkoutGroupLogPost(workoutLogGroupPost: WorkoutLogGroupPost): WorkoutLogGroupPost =
         workoutLogGroupPostRepository.save(workoutLogGroupPost)
@@ -33,18 +36,18 @@ class WorkoutGroupLogPostServiceImpl @Autowired constructor(
     override fun updateWorkoutGroupLogPost(
         id: Long,
         workoutLogGroupPost: WorkoutLogGroupPost,
-    ): WorkoutLogGroupPost? {
-        if (workoutLogGroupPostRepository.existsById(id)) {
-            return workoutLogGroupPostRepository.save(workoutLogGroupPost.copy(id = id))
+    ): WorkoutLogGroupPost {
+        if (!workoutLogGroupPostRepository.existsById(id)) {
+            throw NotFoundException("Workout log group post not found.")
         }
-        return null
+
+        return workoutLogGroupPostRepository.save(workoutLogGroupPost.copy(id = id))
     }
 
-    override fun deleteWorkoutGroupLogPost(id: Long): Boolean {
-        if (workoutLogGroupPostRepository.existsById(id)) {
-            workoutLogGroupPostRepository.deleteById(id)
-            return true
+    override fun deleteWorkoutGroupLogPost(id: Long) {
+        if (!workoutLogGroupPostRepository.existsById(id)) {
+            throw NotFoundException("Workout log group post not found.")
         }
-        return false
+        workoutLogGroupPostRepository.deleteById(id)
     }
 }

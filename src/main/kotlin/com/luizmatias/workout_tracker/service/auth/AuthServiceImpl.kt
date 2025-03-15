@@ -40,7 +40,7 @@ class AuthServiceImpl @Autowired constructor(
         )
     }
 
-    override fun login(credentials: AuthCredentialsDTO): AuthResponseDTO? {
+    override fun login(credentials: AuthCredentialsDTO): AuthResponseDTO {
         try {
             val authResponse =
                 authenticationManager.authenticate(
@@ -52,41 +52,38 @@ class AuthServiceImpl @Autowired constructor(
 
             if (authResponse.isAuthenticated) {
                 val user = userService.getUserByEmail(credentials.email)
-                return user?.let {
-                    AuthResponseDTO(
-                        it.toUserDTO(),
-                        refreshTokenService.generateTokensFromUserAuth(user),
-                    )
-                }
+                return AuthResponseDTO(
+                    user.toUserDTO(),
+                    refreshTokenService.generateTokensFromUserAuth(user),
+                )
+            } else {
+                throw UnauthorizedException("Invalid credentials")
             }
         } catch (e: AuthenticationException) {
             logger.info("Failed to log user: $e")
             throw UnauthorizedException("Invalid credentials")
         }
-        return null
     }
 
     override fun forgotPassword(email: String) {
         val user = userService.getUserByEmail(email)
-        if (user != null) {
-            val token =
-                temporaryTokenService.createTemporaryToken(
-                    TemporaryToken(
-                        id = null,
-                        createdBy = user,
-                        token = UUID.randomUUID().toString(),
-                        type = TokenType.RESET_PASSWORD,
-                        extraData = null,
-                        expiresAt = Instant.now().plus(RESET_PASSWORD_EXPIRATION_MINUTES, ChronoUnit.MINUTES),
-                    ),
-                )
-
-            notificationSenderService.send(
-                user.email,
-                "Password Reset",
-                "Use the following token to reset your password: ${token.token}",
+        val token =
+            temporaryTokenService.createTemporaryToken(
+                TemporaryToken(
+                    id = null,
+                    createdBy = user,
+                    token = UUID.randomUUID().toString(),
+                    type = TokenType.RESET_PASSWORD,
+                    extraData = null,
+                    expiresAt = Instant.now().plus(RESET_PASSWORD_EXPIRATION_MINUTES, ChronoUnit.MINUTES),
+                ),
             )
-        }
+
+        notificationSenderService.send(
+            user.email,
+            "Password Reset",
+            "Use the following token to reset your password: ${token.token}",
+        )
     }
 
     companion object {
