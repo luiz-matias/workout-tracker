@@ -1,6 +1,5 @@
 package com.luizmatias.workout_tracker.controller
 
-import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.NotFoundException
 import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.UserNotFoundException
 import com.luizmatias.workout_tracker.dto.common.PageRequestDTO
 import com.luizmatias.workout_tracker.dto.common.PageResponseDTO
@@ -53,8 +52,7 @@ class GroupController @Autowired constructor(
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<GroupResponseDTO> {
         val user = userService.getUserByEmail(principal.username) ?: throw UserNotFoundException()
-        return groupService.getGroupById(id, user)?.let { ResponseEntity.ok(it.toGroupResponseDTO()) }
-            ?: throw NotFoundException("Group not found")
+        return ResponseEntity.ok(groupService.getGroupById(id, user).toGroupResponseDTO())
     }
 
     @PostMapping("", "/")
