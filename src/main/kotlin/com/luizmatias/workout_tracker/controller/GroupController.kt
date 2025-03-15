@@ -1,7 +1,5 @@
 package com.luizmatias.workout_tracker.controller
 
-import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.NotFoundException
-import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.UserNotFoundException
 import com.luizmatias.workout_tracker.dto.common.PageRequestDTO
 import com.luizmatias.workout_tracker.dto.common.PageResponseDTO
 import com.luizmatias.workout_tracker.dto.group.GroupCreationDTO
@@ -38,7 +36,7 @@ class GroupController @Autowired constructor(
         @AuthenticationPrincipal principal: UserPrincipal,
         @Valid pageRequestDTO: PageRequestDTO,
     ): ResponseEntity<PageResponseDTO<GroupResponseDTO>> {
-        val user = userService.getUserByEmail(principal.username) ?: throw UserNotFoundException()
+        val user = userService.getUserByEmail(principal.username)
         return ResponseEntity.ok(
             groupService.getAllGroups(
                 user,
@@ -52,9 +50,8 @@ class GroupController @Autowired constructor(
         @PathVariable id: Long,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<GroupResponseDTO> {
-        val user = userService.getUserByEmail(principal.username) ?: throw UserNotFoundException()
-        return groupService.getGroupById(id, user)?.let { ResponseEntity.ok(it.toGroupResponseDTO()) }
-            ?: throw NotFoundException("Group not found")
+        val user = userService.getUserByEmail(principal.username)
+        return ResponseEntity.ok(groupService.getGroupById(id, user).toGroupResponseDTO())
     }
 
     @PostMapping("", "/")
@@ -62,7 +59,7 @@ class GroupController @Autowired constructor(
         @RequestBody @Valid groupCreationDTO: GroupCreationDTO,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<GroupResponseDTO> {
-        val user = userService.getUserByEmail(principal.username) ?: throw UserNotFoundException()
+        val user = userService.getUserByEmail(principal.username)
         val group = groupService.createGroup(groupCreationDTO.toGroup(user))
         return ResponseEntity(group.toGroupResponseDTO(), HttpStatus.CREATED)
     }
@@ -72,7 +69,7 @@ class GroupController @Autowired constructor(
         @PathVariable id: Long,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<GroupInviteDTO> {
-        val user = userService.getUserByEmail(principal.username) ?: throw UserNotFoundException()
+        val user = userService.getUserByEmail(principal.username)
         val token = groupService.createInviteToken(id, user)
         return ResponseEntity(GroupInviteDTO(token), HttpStatus.CREATED)
     }

@@ -1,6 +1,5 @@
 package com.luizmatias.workout_tracker.controller
 
-import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.UnauthorizedException
 import com.luizmatias.workout_tracker.dto.common.MessageResponseDTO
 import com.luizmatias.workout_tracker.dto.password_reset.ForgotPasswordRequestDTO
 import com.luizmatias.workout_tracker.dto.token.RefreshTokenRequestDTO
@@ -35,14 +34,7 @@ class AuthController @Autowired constructor(
     @PostMapping("/login")
     fun login(
         @RequestBody @Valid authCredentialsDTO: AuthCredentialsDTO,
-    ): ResponseEntity<AuthResponseDTO> {
-        val response = authService.login(authCredentialsDTO)
-        return if (response != null) {
-            ResponseEntity.ok(response)
-        } else {
-            throw UnauthorizedException("Invalid credentials")
-        }
-    }
+    ): ResponseEntity<AuthResponseDTO> = ResponseEntity.ok(authService.login(authCredentialsDTO))
 
     @PostMapping("/refresh-token")
     fun refreshToken(

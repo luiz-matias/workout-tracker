@@ -9,6 +9,10 @@ class UserPrincipal(
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         val authorities = mutableListOf<GrantedAuthority>(SimpleGrantedAuthority(AccountRole.USER.name))
+        if (user.role == AccountRole.SYS_ADMIN) {
+            authorities.add(SimpleGrantedAuthority(AccountRole.SYS_ADMIN.name))
+            authorities.add(SimpleGrantedAuthority(AccountRole.ADMIN.name))
+        }
         if (user.role == AccountRole.ADMIN) {
             authorities.add(SimpleGrantedAuthority(AccountRole.ADMIN.name))
         }

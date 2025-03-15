@@ -78,7 +78,7 @@ class DatabaseSeederImpl @Autowired constructor(
                 password = password,
                 instagramUsername = "souluizmatias",
                 twitterUsername = "luizmatiasdev",
-                role = AccountRole.ADMIN,
+                role = AccountRole.SYS_ADMIN,
                 groups = emptyList(),
                 createdGroups = emptyList(),
                 workoutLogPosts = emptyList(),

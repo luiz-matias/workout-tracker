@@ -1,7 +1,6 @@
 package com.luizmatias.workout_tracker.service.group
 
 import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.BusinessRuleConflictException
-import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.ForbiddenException
 import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.NotFoundException
 import com.luizmatias.workout_tracker.model.group.Group
 import com.luizmatias.workout_tracker.model.group_members.GroupMember
@@ -33,10 +32,10 @@ class GroupServiceImpl @Autowired constructor(
     override fun getGroupById(
         id: Long,
         user: User,
-    ): Group? {
-        val group = groupRepository.findById(id).orElse(null) ?: throw NotFoundException("Group not found.")
-        if (!groupMemberRepository.existsByUserAndGroup(user, group)) {
-            throw ForbiddenException("You do not have permissions to view this group.")
+    ): Group {
+        val group = groupRepository.findById(id).orElseThrow { NotFoundException(GROUP_NOT_FOUND_MESSAGE) }
+        if (!userCanManageGroup(user, group)) {
+            throw BusinessRuleConflictException("User not allowed to view this group.")
         }
         return group
     }
@@ -60,10 +59,9 @@ class GroupServiceImpl @Autowired constructor(
         groupId: Long,
         user: User,
     ): String {
-        val group = groupRepository.findById(groupId).orElse(null) ?: throw NotFoundException("Group not found.")
-        val userIsInGroup = groupMemberRepository.existsByUserAndGroup(user, group)
-        if (!userIsInGroup) {
-            throw BusinessRuleConflictException("Only members of this group can create invites.")
+        val group = groupRepository.findById(groupId).orElseThrow { NotFoundException(GROUP_NOT_FOUND_MESSAGE) }
+        if (!userCanManageGroup(user, group)) {
+            throw BusinessRuleConflictException("User not allowed to create invites.")
         }
 
         val temporaryToken =
@@ -84,22 +82,33 @@ class GroupServiceImpl @Autowired constructor(
     override fun updateGroup(
         id: Long,
         group: Group,
-    ): Group? {
-        if (groupRepository.existsById(id)) {
-            return groupRepository.save(group.copy(id = id))
+        user: User,
+    ): Group {
+        val storedGroup = groupRepository.findById(id).orElseThrow { NotFoundException(GROUP_NOT_FOUND_MESSAGE) }
+        if (!userCanManageGroup(user, storedGroup)) {
+            throw BusinessRuleConflictException("User not allowed to edit this group.")
         }
-        return null
+        return groupRepository.save(group.copy(id = id))
     }
 
-    override fun deleteGroup(id: Long): Boolean {
-        if (groupRepository.existsById(id)) {
-            groupRepository.deleteById(id)
-            return true
+    override fun deleteGroup(
+        id: Long,
+        user: User,
+    ) {
+        val group = groupRepository.findById(id).orElseThrow { NotFoundException(GROUP_NOT_FOUND_MESSAGE) }
+        if (!userCanManageGroup(user, group)) {
+            throw BusinessRuleConflictException("User not allowed to delete this group.")
         }
-        return false
+        groupRepository.deleteById(id)
     }
+
+    private fun userCanManageGroup(
+        user: User,
+        group: Group,
+    ): Boolean = user.isAdmin() || groupMemberRepository.existsByUserAndGroup(user, group)
 
     companion object {
         private const val GROUP_INVITE_EXPIRATION_DAYS = 7L
+        private const val GROUP_NOT_FOUND_MESSAGE = "Group not found."
     }
 }

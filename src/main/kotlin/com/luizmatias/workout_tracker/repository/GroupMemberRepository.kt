@@ -30,6 +30,15 @@ interface GroupMemberRepository : JpaRepository<GroupMember, Long> {
         pageable: Pageable,
     ): Page<GroupMember>
 
+    /**
+     * Get an active group registration from a given user and group
+     */
+    @Query("SELECT gm FROM GroupMember gm WHERE gm.group = :group AND gm.user = :user AND gm.exitedAt IS NULL")
+    fun findByGroupAndUser(
+        group: Group,
+        user: User,
+    ): GroupMember?
+
     @Query(
         "SELECT CASE WHEN COUNT(gm) > 0 THEN true ELSE false END FROM GroupMember gm " +
             "WHERE gm.user = :user AND gm.group = :group AND gm.exitedAt IS NULL",
