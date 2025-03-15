@@ -28,6 +28,8 @@ class SecurityConfig @Autowired constructor(
                 it
                     .requestMatchers("admin/**")
                     .hasAuthority(AccountRole.ADMIN.name)
+                    .requestMatchers(HttpMethod.GET, "/actuator/**")
+                    .hasAuthority(AccountRole.SYS_ADMIN.name)
                     .requestMatchers("/error")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/**")
