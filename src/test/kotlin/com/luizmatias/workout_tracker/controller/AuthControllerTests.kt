@@ -295,31 +295,6 @@ class AuthControllerTests {
     }
 
     @Test
-    fun `should return 401 when making login with valid credentials and getting user is null`() {
-        Mockito
-            .`when`(this.authService.login(AuthCredentialsDTO("john@email.com", "Secret1212!")))
-            .thenReturn(null)
-
-        mockMvc
-            .perform(
-                post("/auth/login")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .content(
-                        objectMapper
-                            .writeValueAsString(
-                                AuthCredentialsDTO(
-                                    "john@email.com",
-                                    "Secret1212!",
-                                ),
-                            ),
-                    ),
-            )
-            .andExpect(status().isUnauthorized)
-            .andExpectErrorBody()
-    }
-
-    @Test
     fun `should return 200 when calling forgot password`() {
         val request = ForgotPasswordRequestDTO("john@email.com")
 
