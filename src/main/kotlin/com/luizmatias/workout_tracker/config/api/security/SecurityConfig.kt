@@ -28,6 +28,8 @@ class SecurityConfig @Autowired constructor(
                 it
                     .requestMatchers("admin/**")
                     .hasAuthority(AccountRole.ADMIN.name)
+                    .requestMatchers(HttpMethod.GET, "/actuator/**")
+                    .hasAuthority(AccountRole.SYS_ADMIN.name)
                     .requestMatchers("/error")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/**")
@@ -35,6 +37,8 @@ class SecurityConfig @Autowired constructor(
                     .requestMatchers(HttpMethod.GET, "/token/verify-email/**")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/token/password-reset/**")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated()

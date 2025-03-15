@@ -69,13 +69,13 @@
     - [X] Password encryption
     - [ ] Role-based routes
 - [ ] Email services
-    - [ ] Account activation
+    - [X] Account activation
     - [ ] Password change
-    - [ ] Password recovery
-    - [ ] Password changed confirmation
-- [ ] Listing basics
-    - [ ] Pagination
-    - [ ] Sorting
+    - [X] Password recovery
+    - [X] Password changed confirmation
+- [X] Listing basics
+    - [X] Pagination
+    - [X] Sorting
 - [ ] CI/CD
     - [ ] PR pipeline
         - [X] Run lint
