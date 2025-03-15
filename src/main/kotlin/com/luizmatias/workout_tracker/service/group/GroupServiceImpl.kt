@@ -33,7 +33,7 @@ class GroupServiceImpl @Autowired constructor(
         id: Long,
         user: User,
     ): Group {
-        val group = groupRepository.findById(id).orElseThrow { NotFoundException("Group not found.") }
+        val group = groupRepository.findById(id).orElseThrow { NotFoundException(GROUP_NOT_FOUND_MESSAGE) }
         if (!userCanManageGroup(user, group)) {
             throw BusinessRuleConflictException("User not allowed to view this group.")
         }
@@ -59,7 +59,7 @@ class GroupServiceImpl @Autowired constructor(
         groupId: Long,
         user: User,
     ): String {
-        val group = groupRepository.findById(groupId).orElseThrow { NotFoundException("Group not found.") }
+        val group = groupRepository.findById(groupId).orElseThrow { NotFoundException(GROUP_NOT_FOUND_MESSAGE) }
         if (!userCanManageGroup(user, group)) {
             throw BusinessRuleConflictException("User not allowed to create invites.")
         }
@@ -84,7 +84,7 @@ class GroupServiceImpl @Autowired constructor(
         group: Group,
         user: User,
     ): Group {
-        val storedGroup = groupRepository.findById(id).orElseThrow { NotFoundException("Group not found.") }
+        val storedGroup = groupRepository.findById(id).orElseThrow { NotFoundException(GROUP_NOT_FOUND_MESSAGE) }
         if (!userCanManageGroup(user, storedGroup)) {
             throw BusinessRuleConflictException("User not allowed to edit this group.")
         }
@@ -95,7 +95,7 @@ class GroupServiceImpl @Autowired constructor(
         id: Long,
         user: User,
     ) {
-        val group = groupRepository.findById(id).orElseThrow { NotFoundException("Group not found.") }
+        val group = groupRepository.findById(id).orElseThrow { NotFoundException(GROUP_NOT_FOUND_MESSAGE) }
         if (!userCanManageGroup(user, group)) {
             throw BusinessRuleConflictException("User not allowed to delete this group.")
         }
@@ -109,5 +109,6 @@ class GroupServiceImpl @Autowired constructor(
 
     companion object {
         private const val GROUP_INVITE_EXPIRATION_DAYS = 7L
+        private const val GROUP_NOT_FOUND_MESSAGE = "Group not found."
     }
 }

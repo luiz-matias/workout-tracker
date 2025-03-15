@@ -25,7 +25,7 @@ class UserServiceImpl @Autowired constructor(
     private val passwordEncoder: PasswordEncoder,
 ) : UserService {
     override fun getUserByEmail(email: String): User =
-        userRepository.findByEmail(email) ?: throw NotFoundException("User not found.")
+        userRepository.findByEmail(email) ?: throw NotFoundException(USER_NOT_FOUND_MESSAGE)
 
     override fun registerUser(user: User): User {
         val userEncrypted = user.copy(password = passwordEncoder.encode(user.password))
@@ -59,7 +59,7 @@ class UserServiceImpl @Autowired constructor(
         user: User,
     ): User {
         if (!userRepository.existsById(id)) {
-            throw NotFoundException("User not found.")
+            throw NotFoundException(USER_NOT_FOUND_MESSAGE)
         }
 
         return userRepository.save(user.copy(id = id))
@@ -70,7 +70,7 @@ class UserServiceImpl @Autowired constructor(
         existingPassword: String,
         newPassword: String,
     ): User {
-        val user = userRepository.findById(id).orElse(null) ?: throw NotFoundException("User not found.")
+        val user = userRepository.findById(id).orElse(null) ?: throw NotFoundException(USER_NOT_FOUND_MESSAGE)
 
         if (!passwordEncoder.matches(existingPassword, user.password)) {
             throw BusinessRuleConflictException("Invalid existing password.")
@@ -134,9 +134,13 @@ class UserServiceImpl @Autowired constructor(
 
     override fun deleteUser(id: Long) {
         if (!userRepository.existsById(id)) {
-            throw NotFoundException("User not found.")
+            throw NotFoundException(USER_NOT_FOUND_MESSAGE)
         }
 
         userRepository.deleteById(id)
+    }
+
+    companion object {
+        private const val USER_NOT_FOUND_MESSAGE = "User not found."
     }
 }
