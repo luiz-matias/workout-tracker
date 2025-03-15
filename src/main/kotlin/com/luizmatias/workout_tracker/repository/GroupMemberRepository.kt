@@ -33,7 +33,7 @@ interface GroupMemberRepository : JpaRepository<GroupMember, Long> {
     /**
      * Get an active group registration from a given user and group
      */
-    @Query("SELECT gm FROM GroupMember gm WHERE gm.group = :group AND gm.user = :user gm.exitedAt IS NULL LIMIT 1")
+    @Query("SELECT gm FROM GroupMember gm WHERE gm.group = :group AND gm.user = :user AND gm.exitedAt IS NULL")
     fun findByGroupAndUser(
         group: Group,
         user: User,
