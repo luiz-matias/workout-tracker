@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/intellij,java,gradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij,java,gradle
 
+# Kotlin
+.kotlin
+
 ### Intellij ###
 .idea/
 

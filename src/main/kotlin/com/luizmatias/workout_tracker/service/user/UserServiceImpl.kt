@@ -24,7 +24,8 @@ class UserServiceImpl @Autowired constructor(
     private val temporaryTokenService: TemporaryTokenService,
     private val passwordEncoder: PasswordEncoder,
 ) : UserService {
-    override fun getUserByEmail(email: String): User? = userRepository.findByEmail(email)
+    override fun getUserByEmail(email: String): User =
+        userRepository.findByEmail(email) ?: throw NotFoundException(USER_NOT_FOUND_MESSAGE)
 
     override fun registerUser(user: User): User {
         val userEncrypted = user.copy(password = passwordEncoder.encode(user.password))
@@ -56,11 +57,12 @@ class UserServiceImpl @Autowired constructor(
     override fun updateUser(
         id: Long,
         user: User,
-    ): User? {
-        if (userRepository.existsById(id)) {
-            return userRepository.save(user.copy(id = id))
+    ): User {
+        if (!userRepository.existsById(id)) {
+            throw NotFoundException(USER_NOT_FOUND_MESSAGE)
         }
-        return null
+
+        return userRepository.save(user.copy(id = id))
     }
 
     override fun changePassword(
@@ -68,7 +70,7 @@ class UserServiceImpl @Autowired constructor(
         existingPassword: String,
         newPassword: String,
     ): User {
-        val user = userRepository.findById(id).orElse(null) ?: throw NotFoundException("User not found.")
+        val user = userRepository.findById(id).orElse(null) ?: throw NotFoundException(USER_NOT_FOUND_MESSAGE)
 
         if (!passwordEncoder.matches(existingPassword, user.password)) {
             throw BusinessRuleConflictException("Invalid existing password.")
@@ -130,11 +132,15 @@ class UserServiceImpl @Autowired constructor(
         return savedUser
     }
 
-    override fun deleteUser(id: Long): Boolean {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id)
-            return true
+    override fun deleteUser(id: Long) {
+        if (!userRepository.existsById(id)) {
+            throw NotFoundException(USER_NOT_FOUND_MESSAGE)
         }
-        return false
+
+        userRepository.deleteById(id)
+    }
+
+    companion object {
+        private const val USER_NOT_FOUND_MESSAGE = "User not found."
     }
 }

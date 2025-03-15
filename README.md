@@ -67,7 +67,7 @@
     - [ ] OAuth2
     - [X] Strong password requirements
     - [X] Password encryption
-    - [ ] Role-based routes
+    - [X] Role-based routes
 - [ ] Email services
     - [X] Account activation
     - [ ] Password change
@@ -92,13 +92,13 @@
 - [ ] Analytics
     - [ ] Logging
     - [ ] Analytics Dashboard
-    - [ ] Error and Health Check Dashboard
+    - [X] Error and Health Check (Spring Boot Actuator)
     - [ ] Automated alerts
-- [ ] Storage (CDN)
+- [ ] Storage
     - [ ] User profile pictures
     - [ ] Thumbnails
     - [ ] Workout images
-     
+
 ___
 
 # Main Tools

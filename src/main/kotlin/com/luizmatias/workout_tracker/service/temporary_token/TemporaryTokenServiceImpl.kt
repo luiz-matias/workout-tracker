@@ -13,13 +13,11 @@ class TemporaryTokenServiceImpl @Autowired constructor(
 
     override fun getTemporaryTokenByToken(token: String): TemporaryToken? = temporaryTokenRepository.findByToken(token)
 
-    override fun deleteTemporaryToken(token: TemporaryToken): Boolean {
+    override fun deleteTemporaryToken(token: TemporaryToken) {
         token.id?.let {
             if (temporaryTokenRepository.existsById(it)) {
                 temporaryTokenRepository.deleteById(it)
-                return true
             }
         }
-        return false
     }
 }

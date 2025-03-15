@@ -1,6 +1,5 @@
 package com.luizmatias.workout_tracker.controller
 
-import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.UnauthorizedException
 import com.luizmatias.workout_tracker.dto.common.MessageResponseDTO
 import com.luizmatias.workout_tracker.dto.password_reset.PasswordResetRequestDTO
 import com.luizmatias.workout_tracker.model.user.UserPrincipal
@@ -45,9 +44,7 @@ class TemporaryTokenController @Autowired constructor(
         @PathVariable groupToken: String,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<MessageResponseDTO> {
-        val user =
-            userService.getUserByEmail(principal.username)
-                ?: throw UnauthorizedException("You need to be authenticated in order to accept invites.")
+        val user = userService.getUserByEmail(principal.username)
         groupMemberService.acceptInviteToGroup(groupToken, user)
         return ResponseEntity.ok(MessageResponseDTO("User successfully joined the group."))
     }

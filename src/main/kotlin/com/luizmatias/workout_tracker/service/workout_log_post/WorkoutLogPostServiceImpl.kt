@@ -1,5 +1,6 @@
 package com.luizmatias.workout_tracker.service.workout_log_post
 
+import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.NotFoundException
 import com.luizmatias.workout_tracker.model.user.User
 import com.luizmatias.workout_tracker.model.workout_log_post.WorkoutLogPost
 import com.luizmatias.workout_tracker.repository.WorkoutLogPostRepository
@@ -17,7 +18,8 @@ class WorkoutLogPostServiceImpl @Autowired constructor(
         pageable: Pageable,
     ): Page<WorkoutLogPost> = workoutLogPostRepository.findAllByUser(user, pageable)
 
-    override fun getWorkoutLogPostById(id: Long): WorkoutLogPost? = workoutLogPostRepository.findById(id).orElse(null)
+    override fun getWorkoutLogPostById(id: Long): WorkoutLogPost =
+        workoutLogPostRepository.findById(id).orElseThrow { NotFoundException("Workout log post not found.") }
 
     override fun createWorkoutLogPost(workoutLogPost: WorkoutLogPost): WorkoutLogPost =
         workoutLogPostRepository.save(workoutLogPost)
@@ -25,18 +27,19 @@ class WorkoutLogPostServiceImpl @Autowired constructor(
     override fun updateWorkoutLogPost(
         id: Long,
         workoutLogPost: WorkoutLogPost,
-    ): WorkoutLogPost? {
-        if (workoutLogPostRepository.existsById(id)) {
-            return workoutLogPostRepository.save(workoutLogPost.copy(id = id))
+    ): WorkoutLogPost {
+        if (!workoutLogPostRepository.existsById(id)) {
+            throw NotFoundException("Workout log post not found.")
         }
-        return null
+
+        return workoutLogPostRepository.save(workoutLogPost.copy(id = id))
     }
 
-    override fun deleteWorkoutLogPost(id: Long): Boolean {
-        if (workoutLogPostRepository.existsById(id)) {
-            workoutLogPostRepository.deleteById(id)
-            return true
+    override fun deleteWorkoutLogPost(id: Long) {
+        if (!workoutLogPostRepository.existsById(id)) {
+            throw NotFoundException("Workout log post not found.")
         }
-        return false
+
+        workoutLogPostRepository.deleteById(id)
     }
 }
