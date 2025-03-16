@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -23,6 +25,15 @@ import org.springframework.web.bind.annotation.RestController
 class WorkoutLogGroupPostController @Autowired constructor(
     private val workoutLogGroupPostService: WorkoutLogGroupPostService,
 ) {
+    @GetMapping("/{id}")
+    fun getById(
+        @PathVariable id: Long,
+        @AuthenticationPrincipal principal: UserPrincipal,
+    ): ResponseEntity<WorkoutLogGroupPostResponseDTO> =
+        ResponseEntity.ok(
+            workoutLogGroupPostService.getWorkoutGroupLogPostById(id, principal.user).toWorkoutLogGroupPostDTO(),
+        )
+
     @PostMapping("/share")
     fun shareWorkoutLogPostIntoGroups(
         @RequestBody @Valid shareWorkoutLogPostDTO: ShareWorkoutLogPostDTO,
@@ -40,7 +51,7 @@ class WorkoutLogGroupPostController @Autowired constructor(
         )
     }
 
-    @PostMapping("/{id}")
+    @DeleteMapping("/{id}")
     fun deleteWorkoutLogGroupPost(
         @PathVariable id: Long,
         @AuthenticationPrincipal principal: UserPrincipal,

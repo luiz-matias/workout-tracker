@@ -13,7 +13,6 @@ import com.luizmatias.workout_tracker.features.temporary_token.dto.PasswordReset
 import com.luizmatias.workout_tracker.features.group_member.model.GroupMember
 import com.luizmatias.workout_tracker.features.user.model.User
 import com.luizmatias.workout_tracker.features.group_member.service.GroupMemberService
-import com.luizmatias.workout_tracker.features.user.dto.toPrincipal
 import com.luizmatias.workout_tracker.features.user.service.UserService
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -22,7 +21,6 @@ import org.mockito.Mockito
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc

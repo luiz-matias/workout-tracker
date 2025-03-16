@@ -32,10 +32,21 @@ class WorkoutGroupLogPostServiceImpl @Autowired constructor(
         pageable: Pageable,
     ): Page<WorkoutLogGroupPost> = workoutLogGroupPostRepository.findAllByWorkoutLogPost(workoutLogPost, pageable)
 
-    override fun getWorkoutGroupLogPostById(id: Long): WorkoutLogGroupPost =
-        workoutLogGroupPostRepository.findById(id).orElseThrow {
-            NotFoundException("Workout log group post not found.")
+    override fun getWorkoutGroupLogPostById(
+        id: Long,
+        user: User,
+    ): WorkoutLogGroupPost {
+        val workoutLogGroupPost =
+            workoutLogGroupPostRepository.findById(id).orElseThrow {
+                NotFoundException("Workout log group post not found.")
+            }
+
+        if (!userCanManageWorkoutGroupLogPost(user, workoutLogGroupPost)) {
+            throw ForbiddenException("User can't access this workout log group post.")
         }
+
+        return workoutLogGroupPost
+    }
 
     override fun createWorkoutGroupLogPosts(
         workoutLogPostId: Long,

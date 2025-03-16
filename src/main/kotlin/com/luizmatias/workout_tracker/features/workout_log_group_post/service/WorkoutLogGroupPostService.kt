@@ -37,7 +37,10 @@ interface WorkoutLogGroupPostService {
     /**
      * Get a workout log group post by its ID.
      */
-    fun getWorkoutGroupLogPostById(id: Long): WorkoutLogGroupPost
+    fun getWorkoutGroupLogPostById(
+        id: Long,
+        user: User,
+    ): WorkoutLogGroupPost
 
     /**
      * Create multiple group log posts for a given range of groups
