@@ -5,14 +5,13 @@ import com.luizmatias.workout_tracker.features.common.dto.PageRequestDTO
 import com.luizmatias.workout_tracker.features.common.dto.PageResponseDTO
 import com.luizmatias.workout_tracker.features.common.dto.toPageRequest
 import com.luizmatias.workout_tracker.features.common.dto.toPageResponseDTO
+import com.luizmatias.workout_tracker.features.user.model.UserPrincipal
+import com.luizmatias.workout_tracker.features.workout_log_post.dto.WorkoutLogPostCreationDTO
+import com.luizmatias.workout_tracker.features.workout_log_post.dto.WorkoutLogPostResponseDTO
 import com.luizmatias.workout_tracker.features.workout_log_post.dto.toWorkoutLogPostCreation
 import com.luizmatias.workout_tracker.features.workout_log_post.dto.toWorkoutLogPostDTO
 import com.luizmatias.workout_tracker.features.workout_log_post.dto.toWorkoutLogPostEdit
-import com.luizmatias.workout_tracker.features.workout_log_post.dto.WorkoutLogPostCreationDTO
-import com.luizmatias.workout_tracker.features.workout_log_post.dto.WorkoutLogPostResponseDTO
-import com.luizmatias.workout_tracker.features.user.model.UserPrincipal
 import com.luizmatias.workout_tracker.features.workout_log_post.model.WorkoutLogPost
-import com.luizmatias.workout_tracker.features.user.service.UserService
 import com.luizmatias.workout_tracker.features.workout_log_post.service.WorkoutLogPostService
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/workout_log_posts")
 class WorkoutLogPostController @Autowired constructor(
-    private val userService: UserService,
     private val workoutLogPostService: WorkoutLogPostService,
 ) {
     @GetMapping("", "/")
@@ -39,11 +37,10 @@ class WorkoutLogPostController @Autowired constructor(
         @AuthenticationPrincipal principal: UserPrincipal,
         @Valid pageRequestDTO: PageRequestDTO,
     ): ResponseEntity<PageResponseDTO<WorkoutLogPostResponseDTO>> {
-        val user = userService.getUserByEmail(principal.username)
-        workoutLogPostService.getAllWorkoutLogPostsByUser(user, pageRequestDTO.toPageRequest())
+        workoutLogPostService.getAllWorkoutLogPostsByUser(principal.user, pageRequestDTO.toPageRequest())
         return ResponseEntity.ok(
             workoutLogPostService.getAllWorkoutLogPostsByUser(
-                user,
+                principal.user,
                 pageRequestDTO.toPageRequest(),
             ).toPageResponseDTO(WorkoutLogPost::toWorkoutLogPostDTO),
         )
@@ -54,8 +51,7 @@ class WorkoutLogPostController @Autowired constructor(
         @PathVariable id: Long,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<WorkoutLogPostResponseDTO> {
-        val user = userService.getUserByEmail(principal.username)
-        return ResponseEntity.ok(workoutLogPostService.getWorkoutLogPostById(id, user).toWorkoutLogPostDTO())
+        return ResponseEntity.ok(workoutLogPostService.getWorkoutLogPostById(id, principal.user).toWorkoutLogPostDTO())
     }
 
     @PostMapping("", "/")
@@ -63,9 +59,8 @@ class WorkoutLogPostController @Autowired constructor(
         @RequestBody @Valid workoutLogPostCreationDTO: WorkoutLogPostCreationDTO,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<WorkoutLogPostResponseDTO> {
-        val user = userService.getUserByEmail(principal.username)
         val workoutLogPost =
-            workoutLogPostService.createWorkoutLogPost(workoutLogPostCreationDTO.toWorkoutLogPostCreation(user))
+            workoutLogPostService.createWorkoutLogPost(workoutLogPostCreationDTO.toWorkoutLogPostCreation(principal.user))
         return ResponseEntity(workoutLogPost.toWorkoutLogPostDTO(), HttpStatus.CREATED)
     }
 
@@ -75,12 +70,11 @@ class WorkoutLogPostController @Autowired constructor(
         @RequestBody @Valid workoutLogPostUpdateDTO: WorkoutLogPostCreationDTO,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<WorkoutLogPostResponseDTO> {
-        val user = userService.getUserByEmail(principal.username)
         val workoutLogPost =
             workoutLogPostService.updateWorkoutLogPost(
                 id,
-                workoutLogPostUpdateDTO.toWorkoutLogPostEdit(user),
-                user,
+                workoutLogPostUpdateDTO.toWorkoutLogPostEdit(principal.user),
+                principal.user,
             )
         return ResponseEntity.ok(workoutLogPost.toWorkoutLogPostDTO())
     }
@@ -90,8 +84,7 @@ class WorkoutLogPostController @Autowired constructor(
         @PathVariable id: Long,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<MessageResponseDTO> {
-        val user = userService.getUserByEmail(principal.username)
-        workoutLogPostService.deleteWorkoutLogPost(id, user)
+        workoutLogPostService.deleteWorkoutLogPost(id, principal.user)
         return ResponseEntity.ok(MessageResponseDTO("Workout log post deleted successfully."))
     }
 }

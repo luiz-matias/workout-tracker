@@ -15,7 +15,6 @@ import com.luizmatias.workout_tracker.features.group.model.Group
 import com.luizmatias.workout_tracker.features.group.service.GroupService
 import com.luizmatias.workout_tracker.features.group_member.service.GroupMemberService
 import com.luizmatias.workout_tracker.features.user.model.UserPrincipal
-import com.luizmatias.workout_tracker.features.user.service.UserService
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/groups")
 class GroupController @Autowired constructor(
-    private val userService: UserService,
     private val groupService: GroupService,
     private val groupMemberService: GroupMemberService,
 ) {
@@ -42,10 +40,9 @@ class GroupController @Autowired constructor(
         @AuthenticationPrincipal principal: UserPrincipal,
         @Valid pageRequestDTO: PageRequestDTO,
     ): ResponseEntity<PageResponseDTO<GroupResponseDTO>> {
-        val user = userService.getUserByEmail(principal.username)
         return ResponseEntity.ok(
             groupService.getAllGroups(
-                user,
+                principal.user,
                 pageRequestDTO.toPageRequest(),
             ).toPageResponseDTO(Group::toGroupResponseDTO),
         )
@@ -56,8 +53,7 @@ class GroupController @Autowired constructor(
         @PathVariable id: Long,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<GroupResponseDTO> {
-        val user = userService.getUserByEmail(principal.username)
-        return ResponseEntity.ok(groupService.getGroupById(id, user).toGroupResponseDTO())
+        return ResponseEntity.ok(groupService.getGroupById(id, principal.user).toGroupResponseDTO())
     }
 
     @PostMapping("", "/")
@@ -65,8 +61,7 @@ class GroupController @Autowired constructor(
         @RequestBody @Valid groupCreationDTO: GroupCreationDTO,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<GroupResponseDTO> {
-        val user = userService.getUserByEmail(principal.username)
-        val group = groupService.createGroup(groupCreationDTO.toGroupCreation(user))
+        val group = groupService.createGroup(groupCreationDTO.toGroupCreation(principal.user))
         return ResponseEntity(group.toGroupResponseDTO(), HttpStatus.CREATED)
     }
 
@@ -75,8 +70,7 @@ class GroupController @Autowired constructor(
         @PathVariable id: Long,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<GroupInviteDTO> {
-        val user = userService.getUserByEmail(principal.username)
-        val token = groupService.createInviteToken(id, user)
+        val token = groupService.createInviteToken(id, principal.user)
         return ResponseEntity(GroupInviteDTO(token), HttpStatus.CREATED)
     }
 
@@ -85,8 +79,7 @@ class GroupController @Autowired constructor(
         @PathVariable id: Long,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<MessageResponseDTO> {
-        val user = userService.getUserByEmail(principal.username)
-        groupMemberService.exitFromGroup(id, user)
+        groupMemberService.exitFromGroup(id, principal.user)
         return ResponseEntity.ok(MessageResponseDTO("Successfully exited the group."))
     }
 
@@ -96,8 +89,7 @@ class GroupController @Autowired constructor(
         @RequestBody @Valid groupUpdateDTO: GroupCreationDTO,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<GroupResponseDTO> {
-        val user = userService.getUserByEmail(principal.username)
-        val group = groupService.updateGroup(id, groupUpdateDTO.toGroupEdit(), user)
+        val group = groupService.updateGroup(id, groupUpdateDTO.toGroupEdit(), principal.user)
         return ResponseEntity.ok(group.toGroupResponseDTO())
     }
 
@@ -106,8 +98,7 @@ class GroupController @Autowired constructor(
         @PathVariable id: Long,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<MessageResponseDTO> {
-        val user = userService.getUserByEmail(principal.username)
-        groupService.deleteGroup(id, user)
+        groupService.deleteGroup(id, principal.user)
         return ResponseEntity.ok(MessageResponseDTO("Group deleted successfully."))
     }
 }
