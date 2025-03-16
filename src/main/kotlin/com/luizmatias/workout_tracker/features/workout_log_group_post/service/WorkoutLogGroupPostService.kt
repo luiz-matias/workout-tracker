@@ -1,6 +1,7 @@
 package com.luizmatias.workout_tracker.features.workout_log_group_post.service
 
 import com.luizmatias.workout_tracker.features.group_member.model.GroupMember
+import com.luizmatias.workout_tracker.features.user.model.User
 import com.luizmatias.workout_tracker.features.workout_log_group_post.model.WorkoutLogGroupPost
 import com.luizmatias.workout_tracker.features.workout_log_post.model.WorkoutLogPost
 import org.springframework.data.domain.Page
@@ -39,20 +40,16 @@ interface WorkoutLogGroupPostService {
     fun getWorkoutGroupLogPostById(id: Long): WorkoutLogGroupPost
 
     /**
-     * Create a new workout log group post.
+     * Create multiple group log posts for a given range of groups
      */
-    fun createWorkoutGroupLogPost(workoutLogGroupPost: WorkoutLogGroupPost): WorkoutLogGroupPost
-
-    /**
-     * Update a workout log group post.
-     */
-    fun updateWorkoutGroupLogPost(
-        id: Long,
-        workoutLogGroupPost: WorkoutLogGroupPost,
-    ): WorkoutLogGroupPost
+    fun createWorkoutGroupLogPosts(
+        workoutLogPostId: Long,
+        groupIds: List<Long>,
+        user: User,
+    ): List<WorkoutLogGroupPost>
 
     /**
      * Delete a workout log group post.
      */
-    fun deleteWorkoutGroupLogPost(id: Long)
+    fun deleteWorkoutGroupLogPost(id: Long, user: User)
 }
