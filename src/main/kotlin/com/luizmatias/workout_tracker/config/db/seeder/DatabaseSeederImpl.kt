@@ -1,19 +1,19 @@
 package com.luizmatias.workout_tracker.config.db.seeder
 
-import com.luizmatias.workout_tracker.model.group.Group
-import com.luizmatias.workout_tracker.model.group.GroupMeasurementStrategy
-import com.luizmatias.workout_tracker.model.group_members.GroupMember
-import com.luizmatias.workout_tracker.model.user.AccountRole
-import com.luizmatias.workout_tracker.model.user.User
-import com.luizmatias.workout_tracker.model.workout_log_group_post.WorkoutLogGroupPost
-import com.luizmatias.workout_tracker.model.workout_log_post.WorkoutLogPost
-import com.luizmatias.workout_tracker.repository.GroupMemberRepository
-import com.luizmatias.workout_tracker.repository.GroupRepository
-import com.luizmatias.workout_tracker.repository.RefreshTokenRepository
-import com.luizmatias.workout_tracker.repository.TemporaryTokenRepository
-import com.luizmatias.workout_tracker.repository.UserRepository
-import com.luizmatias.workout_tracker.repository.WorkoutLogGroupPostRepository
-import com.luizmatias.workout_tracker.repository.WorkoutLogPostRepository
+import com.luizmatias.workout_tracker.features.group.model.Group
+import com.luizmatias.workout_tracker.features.group.model.GroupMeasurementStrategy
+import com.luizmatias.workout_tracker.features.group_member.model.GroupMember
+import com.luizmatias.workout_tracker.features.user.model.AccountRole
+import com.luizmatias.workout_tracker.features.user.model.User
+import com.luizmatias.workout_tracker.features.workout_log_group_post.model.WorkoutLogGroupPost
+import com.luizmatias.workout_tracker.features.workout_log_post.model.WorkoutLogPost
+import com.luizmatias.workout_tracker.features.group_member.repository.GroupMemberRepository
+import com.luizmatias.workout_tracker.features.group.repository.GroupRepository
+import com.luizmatias.workout_tracker.features.auth_token.repository.RefreshTokenRepository
+import com.luizmatias.workout_tracker.features.temporary_token.repository.TemporaryTokenRepository
+import com.luizmatias.workout_tracker.features.user.repository.UserRepository
+import com.luizmatias.workout_tracker.features.workout_log_group_post.repository.WorkoutLogGroupPostRepository
+import com.luizmatias.workout_tracker.features.workout_log_post.repository.WorkoutLogPostRepository
 import jakarta.transaction.Transactional
 import java.time.Instant
 import java.util.UUID
@@ -179,7 +179,7 @@ class DatabaseSeederImpl @Autowired constructor(
                     WorkoutLogPost(
                         id = null,
                         user = user,
-                        name = faker.lorem().maxLengthSentence(20),
+                        title = faker.lorem().maxLengthSentence(20),
                         photoUrl = "https://api.dicebear.com/9.x/notionists/png?seed=${faker.lorem().sentence(5)}",
                         description = faker.lorem().maxLengthSentence(100),
                         workoutLogGroupPosts = emptyList(),

@@ -38,12 +38,17 @@
     - [ ] Create Workout Logs
     - [ ] Edit Workout Logs
     - [ ] Delete Workout Logs
-- [ ] Group Management
+- [ ] Workout Log Sharing into Groups
+    - [ ] List Workout Logs
+    - [ ] Create Workout Logs
+    - [ ] Edit Workout Logs
+    - [ ] Delete Workout Logs
+- [X] Group Management
     - [X] Create Group
     - [X] Create Invite
-    - [ ] Edit Group
-    - [ ] Delete Group
-    - [ ] Quit from Group
+    - [X] Edit Group
+    - [X] Delete Group
+    - [X] Quit from Group
 - [ ] Report System
     - [ ] Report User
     - [ ] Report Post

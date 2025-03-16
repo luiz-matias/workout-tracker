@@ -1,9 +1,9 @@
 package com.luizmatias.workout_tracker.common
 
-import com.luizmatias.workout_tracker.config.api.exception.advice.ExceptionHandlerAdvice
-import com.luizmatias.workout_tracker.model.user.AccountRole
-import com.luizmatias.workout_tracker.model.user.User
-import com.luizmatias.workout_tracker.model.user.UserPrincipal
+import com.luizmatias.workout_tracker.config.exception.advice.ExceptionHandlerAdvice
+import com.luizmatias.workout_tracker.features.user.model.AccountRole
+import com.luizmatias.workout_tracker.features.user.model.User
+import com.luizmatias.workout_tracker.features.user.model.UserPrincipal
 import java.time.Instant
 import org.springframework.core.MethodParameter
 import org.springframework.test.web.servlet.ResultActions
