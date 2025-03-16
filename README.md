@@ -17,32 +17,25 @@
     - [X] Readme About the Project
     - [X] List of epics and stories
     - [X] Environment Preparation
-- [ ] Authentication
+- [X] Authentication
     - [X] Login
     - [X] Email activation
     - [X] Registration
-    - [ ] 2FA through TOTP
     - [X] Password Recovery
 - [ ] Account Management
     - [ ] Edit Profile
     - [ ] Manage Photo
     - [ ] Change Password
     - [ ] Delete Account
-- [ ] Workout Routines
-    - [ ] List Workout Routines
-    - [ ] Create Workout Routines
-    - [ ] Edit Workout Routines
-    - [ ] Delete Workout Routines
-- [ ] Workout Logs
-    - [ ] List Workout Logs
-    - [ ] Create Workout Logs
-    - [ ] Edit Workout Logs
-    - [ ] Delete Workout Logs
+- [X] Workout Logs
+    - [X] List Workout Logs
+    - [X] Create Workout Logs
+    - [X] Edit Workout Logs
+    - [X] Delete Workout Logs
 - [ ] Workout Log Sharing into Groups
     - [ ] List Workout Logs
-    - [ ] Create Workout Logs
-    - [ ] Edit Workout Logs
-    - [ ] Delete Workout Logs
+    - [X] Create Workout Logs
+    - [X] Delete Workout Logs
 - [X] Group Management
     - [X] Create Group
     - [X] Create Invite
@@ -60,16 +53,11 @@
         - [ ] List of Reports
         - [ ] Accept Reports
         - [ ] Decline Reports
-    - [ ] Manage Available Exercises
-        - [ ] Create Exercises
-        - [ ] Edit Existing Exercises
-        - [ ] "Delete" Exercises
 
 ## Tech Features (Non-functional Requirements)
 
 - [X] Security
     - [X] Authentication via JWT
-    - [ ] OAuth2
     - [X] Strong password requirements
     - [X] Password encryption
     - [X] Role-based routes
