@@ -2,16 +2,18 @@ package com.luizmatias.workout_tracker.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.luizmatias.workout_tracker.features.temporary_token.controller.TemporaryTokenController
 import com.luizmatias.workout_tracker.common.andExpectErrorBody
+import com.luizmatias.workout_tracker.common.any
 import com.luizmatias.workout_tracker.common.setupAuthenticatedMockMvc
-import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.BusinessRuleConflictException
-import com.luizmatias.workout_tracker.config.api.exception.common_exceptions.NotFoundException
-import com.luizmatias.workout_tracker.dto.common.MessageResponseDTO
-import com.luizmatias.workout_tracker.dto.password_reset.PasswordResetRequestDTO
-import com.luizmatias.workout_tracker.model.group_members.GroupMember
-import com.luizmatias.workout_tracker.model.user.User
-import com.luizmatias.workout_tracker.service.group_member.GroupMemberService
-import com.luizmatias.workout_tracker.service.user.UserService
+import com.luizmatias.workout_tracker.config.exception.common_exceptions.BusinessRuleConflictException
+import com.luizmatias.workout_tracker.config.exception.common_exceptions.NotFoundException
+import com.luizmatias.workout_tracker.features.common.dto.MessageResponseDTO
+import com.luizmatias.workout_tracker.features.temporary_token.dto.PasswordResetRequestDTO
+import com.luizmatias.workout_tracker.features.group_member.model.GroupMember
+import com.luizmatias.workout_tracker.features.user.model.User
+import com.luizmatias.workout_tracker.features.group_member.service.GroupMemberService
+import com.luizmatias.workout_tracker.features.user.service.UserService
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import org.mockito.Mock
@@ -182,9 +184,7 @@ class TemporaryTokenControllerTests {
     @Test
     fun `should return 409 when accepting group invite with expired or invalid token`() {
         val groupToken = "group_token"
-
-        Mockito.`when`(userService.getUserByEmail("john.doe@email.com")).thenReturn(user)
-        Mockito.`when`(groupMemberService.acceptInviteToGroup(groupToken, user)).thenAnswer {
+        Mockito.`when`(groupMemberService.acceptInviteToGroup(Mockito.anyString(), any(User::class.java))).thenAnswer {
             throw BusinessRuleConflictException()
         }
 
