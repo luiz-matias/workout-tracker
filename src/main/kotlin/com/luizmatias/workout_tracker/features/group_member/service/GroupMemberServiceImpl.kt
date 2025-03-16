@@ -73,11 +73,12 @@ class GroupMemberServiceImpl @Autowired constructor(
         groupId: Long,
         user: User,
     ) {
-        val group = try {
-            groupService.getGroupById(groupId, user)
-        } catch (e: BusinessRuleConflictException) {
-            throw BusinessRuleConflictException("User not allowed to exit this group.")
-        }
+        val group =
+            try {
+                groupService.getGroupById(groupId, user)
+            } catch (e: BusinessRuleConflictException) {
+                throw BusinessRuleConflictException("User not allowed to exit this group.", e)
+            }
         var groupMember =
             groupMemberRepository.findByGroupAndUser(group, user)
                 ?: throw NotFoundException("User is not in this group.")

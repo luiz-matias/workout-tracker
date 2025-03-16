@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.luizmatias.workout_tracker.features.temporary_token.controller.TemporaryTokenController
 import com.luizmatias.workout_tracker.common.andExpectErrorBody
+import com.luizmatias.workout_tracker.common.any
 import com.luizmatias.workout_tracker.common.setupAuthenticatedMockMvc
 import com.luizmatias.workout_tracker.config.exception.common_exceptions.BusinessRuleConflictException
 import com.luizmatias.workout_tracker.config.exception.common_exceptions.NotFoundException
@@ -12,6 +13,7 @@ import com.luizmatias.workout_tracker.features.temporary_token.dto.PasswordReset
 import com.luizmatias.workout_tracker.features.group_member.model.GroupMember
 import com.luizmatias.workout_tracker.features.user.model.User
 import com.luizmatias.workout_tracker.features.group_member.service.GroupMemberService
+import com.luizmatias.workout_tracker.features.user.dto.toPrincipal
 import com.luizmatias.workout_tracker.features.user.service.UserService
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -20,6 +22,7 @@ import org.mockito.Mockito
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
@@ -183,9 +186,7 @@ class TemporaryTokenControllerTests {
     @Test
     fun `should return 409 when accepting group invite with expired or invalid token`() {
         val groupToken = "group_token"
-
-        Mockito.`when`(userService.getUserByEmail("john.doe@email.com")).thenReturn(user)
-        Mockito.`when`(groupMemberService.acceptInviteToGroup(groupToken, user)).thenAnswer {
+        Mockito.`when`(groupMemberService.acceptInviteToGroup(Mockito.anyString(), any(User::class.java))).thenAnswer {
             throw BusinessRuleConflictException()
         }
 

@@ -30,5 +30,4 @@ class UserPrincipal(
     override fun isCredentialsNonExpired() = true
 
     override fun isEnabled() = user.isEnabled
-
 }

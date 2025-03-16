@@ -39,22 +39,20 @@ class GroupController @Autowired constructor(
     fun getAll(
         @AuthenticationPrincipal principal: UserPrincipal,
         @Valid pageRequestDTO: PageRequestDTO,
-    ): ResponseEntity<PageResponseDTO<GroupResponseDTO>> {
-        return ResponseEntity.ok(
+    ): ResponseEntity<PageResponseDTO<GroupResponseDTO>> =
+        ResponseEntity.ok(
             groupService.getAllGroups(
                 principal.user,
                 pageRequestDTO.toPageRequest(),
             ).toPageResponseDTO(Group::toGroupResponseDTO),
         )
-    }
 
     @GetMapping("/{id}")
     fun getById(
         @PathVariable id: Long,
         @AuthenticationPrincipal principal: UserPrincipal,
-    ): ResponseEntity<GroupResponseDTO> {
-        return ResponseEntity.ok(groupService.getGroupById(id, principal.user).toGroupResponseDTO())
-    }
+    ): ResponseEntity<GroupResponseDTO> =
+        ResponseEntity.ok(groupService.getGroupById(id, principal.user).toGroupResponseDTO())
 
     @PostMapping("", "/")
     fun create(

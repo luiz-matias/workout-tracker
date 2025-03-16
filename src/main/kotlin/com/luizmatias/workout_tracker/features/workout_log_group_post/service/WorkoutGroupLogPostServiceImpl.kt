@@ -43,30 +43,36 @@ class WorkoutGroupLogPostServiceImpl @Autowired constructor(
         user: User,
     ): List<WorkoutLogGroupPost> {
         val workoutLogPost = workoutLogPostService.getWorkoutLogPostById(workoutLogPostId, user)
-        val groupMembers = groupMemberService
-            .getAllGroupRegistrationsByUser(user, Pageable.unpaged())
-            .filter { it.group.id in groupIds }
+        val groupMembers =
+            groupMemberService
+                .getAllGroupRegistrationsByUser(user, Pageable.unpaged())
+                .filter { it.group.id in groupIds }
 
         if (groupMembers.isEmpty) {
             throw BusinessRuleConflictException("User is not part of any of the groups provided.")
         }
 
-        val workoutLogGroupPosts = groupMembers.map { groupMember ->
-            WorkoutLogGroupPost(
-                id = null,
-                workoutLogPost = workoutLogPost,
-                groupMember = groupMember,
-                createdAt = Instant.now(),
-            )
-        }
+        val workoutLogGroupPosts =
+            groupMembers.map { groupMember ->
+                WorkoutLogGroupPost(
+                    id = null,
+                    workoutLogPost = workoutLogPost,
+                    groupMember = groupMember,
+                    createdAt = Instant.now(),
+                )
+            }
 
         return workoutLogGroupPostRepository.saveAll(workoutLogGroupPosts)
     }
 
-    override fun deleteWorkoutGroupLogPost(id: Long, user: User) {
-        val storedGroupPost = workoutLogGroupPostRepository.findById(id).orElseThrow {
-            NotFoundException("Workout log group post not found.")
-        }
+    override fun deleteWorkoutGroupLogPost(
+        id: Long,
+        user: User,
+    ) {
+        val storedGroupPost =
+            workoutLogGroupPostRepository.findById(id).orElseThrow {
+                NotFoundException("Workout log group post not found.")
+            }
 
         if (!userCanManageWorkoutGroupLogPost(user, storedGroupPost)) {
             throw ForbiddenException("User can't delete this workout log group post.")
@@ -75,7 +81,8 @@ class WorkoutGroupLogPostServiceImpl @Autowired constructor(
         workoutLogGroupPostRepository.save(storedGroupPost.copy(deletedAt = Instant.now()))
     }
 
-    private fun userCanManageWorkoutGroupLogPost(user: User, workoutLogGroupPost: WorkoutLogGroupPost): Boolean {
-        return user.isAdmin() || workoutLogGroupPost.groupMember.user.id == user.id
-    }
+    private fun userCanManageWorkoutGroupLogPost(
+        user: User,
+        workoutLogGroupPost: WorkoutLogGroupPost,
+    ): Boolean = user.isAdmin() || workoutLogGroupPost.groupMember.user.id == user.id
 }

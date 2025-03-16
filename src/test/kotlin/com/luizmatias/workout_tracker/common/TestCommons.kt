@@ -5,6 +5,7 @@ import com.luizmatias.workout_tracker.features.user.model.AccountRole
 import com.luizmatias.workout_tracker.features.user.model.User
 import com.luizmatias.workout_tracker.features.user.model.UserPrincipal
 import java.time.Instant
+import org.mockito.Mockito
 import org.springframework.core.MethodParameter
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -13,6 +14,11 @@ import org.springframework.web.bind.support.WebDataBinderFactory
 import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
+
+/**
+ * Wraps Mockito any to allow null values as well.
+ */
+fun <T> any(type: Class<T>): T = Mockito.any(type)
 
 /**
  * Asserts that the response body contains the error fields.

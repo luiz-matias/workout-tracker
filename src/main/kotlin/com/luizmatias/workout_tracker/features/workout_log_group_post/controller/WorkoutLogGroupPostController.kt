@@ -21,20 +21,23 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/workout_log_group_posts")
 class WorkoutLogGroupPostController @Autowired constructor(
-    private val workoutLogGroupPostService: WorkoutLogGroupPostService
+    private val workoutLogGroupPostService: WorkoutLogGroupPostService,
 ) {
-
     @PostMapping("/share")
     fun shareWorkoutLogPostIntoGroups(
         @RequestBody @Valid shareWorkoutLogPostDTO: ShareWorkoutLogPostDTO,
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<List<WorkoutLogGroupPostResponseDTO>> {
-        val createdWorkoutShares = workoutLogGroupPostService.createWorkoutGroupLogPosts(
-            shareWorkoutLogPostDTO.workoutLogPostId,
-            shareWorkoutLogPostDTO.groupIds,
-            principal.user
+        val createdWorkoutShares =
+            workoutLogGroupPostService.createWorkoutGroupLogPosts(
+                shareWorkoutLogPostDTO.workoutLogPostId,
+                shareWorkoutLogPostDTO.groupIds,
+                principal.user,
+            )
+        return ResponseEntity(
+            createdWorkoutShares.map(WorkoutLogGroupPost::toWorkoutLogGroupPostDTO),
+            HttpStatus.CREATED,
         )
-        return ResponseEntity(createdWorkoutShares.map(WorkoutLogGroupPost::toWorkoutLogGroupPostDTO), HttpStatus.CREATED)
     }
 
     @PostMapping("/{id}")
@@ -45,5 +48,4 @@ class WorkoutLogGroupPostController @Autowired constructor(
         workoutLogGroupPostService.deleteWorkoutGroupLogPost(id, principal.user)
         return ResponseEntity.ok(MessageResponseDTO("Workout log group post deleted."))
     }
-
 }

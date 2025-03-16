@@ -51,5 +51,8 @@ interface WorkoutLogGroupPostService {
     /**
      * Delete a workout log group post.
      */
-    fun deleteWorkoutGroupLogPost(id: Long, user: User)
+    fun deleteWorkoutGroupLogPost(
+        id: Long,
+        user: User,
+    )
 }

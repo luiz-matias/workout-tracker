@@ -50,9 +50,8 @@ class WorkoutLogPostController @Autowired constructor(
     fun getById(
         @PathVariable id: Long,
         @AuthenticationPrincipal principal: UserPrincipal,
-    ): ResponseEntity<WorkoutLogPostResponseDTO> {
-        return ResponseEntity.ok(workoutLogPostService.getWorkoutLogPostById(id, principal.user).toWorkoutLogPostDTO())
-    }
+    ): ResponseEntity<WorkoutLogPostResponseDTO> =
+        ResponseEntity.ok(workoutLogPostService.getWorkoutLogPostById(id, principal.user).toWorkoutLogPostDTO())
 
     @PostMapping("", "/")
     fun createWorkoutLogPost(
@@ -60,7 +59,9 @@ class WorkoutLogPostController @Autowired constructor(
         @AuthenticationPrincipal principal: UserPrincipal,
     ): ResponseEntity<WorkoutLogPostResponseDTO> {
         val workoutLogPost =
-            workoutLogPostService.createWorkoutLogPost(workoutLogPostCreationDTO.toWorkoutLogPostCreation(principal.user))
+            workoutLogPostService.createWorkoutLogPost(
+                workoutLogPostCreationDTO.toWorkoutLogPostCreation(principal.user),
+            )
         return ResponseEntity(workoutLogPost.toWorkoutLogPostDTO(), HttpStatus.CREATED)
     }
 
