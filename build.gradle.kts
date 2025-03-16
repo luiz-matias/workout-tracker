@@ -136,6 +136,17 @@ tasks.withType<DetektCreateBaselineTask>().configureEach {
     jvmTarget = "1.8"
 }
 
+tasks.jar {
+    manifest.attributes["Main-Class"] = "com.luizmatias.workout_tracker.WorkoutTrackerApplicationKt"
+    val dependencies =
+        configurations
+            .runtimeClasspath
+            .get()
+            .map(::zipTree)
+    from(dependencies)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 configurations.matching { it.name == "detekt" }.all {
     resolutionStrategy.eachDependency {
         if (requested.group == "org.jetbrains.kotlin") {
